@@ -19,6 +19,7 @@
 #include "PhysicsHandler.h"
 #include "PlayerCamera.h"
 #include "PlayerCollider.h"
+#include "LadderCollider.h"
 #include "ProjectilePool.h"
 #include "Texture.h"
 #include "TextureCache.h"
@@ -43,6 +44,20 @@ void LevelScene::InitializeScene()
 
 	CreateLevel();
 
+    // First Ladder
+    /*
+	m_pTestLadder = m_pEntityKeeper->CreateEntity(0, "Ladder");
+
+    m_pTestLadder->AddComponent(new Transform(m_pTestLadder, Vector2f(730, 40)));
+	m_pTestLadder->AddComponent(new LadderCollider(m_pTestLadder, std::vector<Vector2f>{
+		Vector2f(0, 0),
+		Vector2f(0, 100),
+		Vector2f(5, 100),
+		Vector2f(5, 0),
+	}));
+
+	m_pTestLadder->Initialize();
+    */
 }
 
 
@@ -84,10 +99,10 @@ Entity* LevelScene::GetPlayer() const
 
 void LevelScene::CreatePlayer()
 {
-	m_pTextureCache->LoadTexture("player", "player.png");
+	m_pTextureCache->LoadTexture("player", "Resources/player.png");
 
 	m_pPlayer = m_pEntityKeeper->CreateEntity(100, "Player");
-	m_pPlayer->AddComponent(new Transform(m_pPlayer, Vector2f(10, 40)));
+	m_pPlayer->AddComponent(new Transform(m_pPlayer, Vector2f(80, 40)));
 
 	// RENDERING
 	const float spriteWidth{ 22.f };
@@ -238,8 +253,8 @@ void LevelScene::CreateEnemy()
 
 void LevelScene::CreateLevel()
 {
-	Texture* foreground{ m_pTextureCache->LoadTexture("level1Foreground", "level1Foreground.png") };
-	Texture* background{ m_pTextureCache->LoadTexture("level1Background", "level1Background.png") };
+	Texture* foreground{ m_pTextureCache->LoadTexture("level1Foreground", "Resources/level1Foreground.png") };
+	Texture* background{ m_pTextureCache->LoadTexture("level1Background", "Resources/level1Background.png") };
 
 	m_LevelSize = Vector2f(foreground->GetWidth(), foreground->GetHeight());
 
@@ -252,6 +267,7 @@ void LevelScene::CreateLevel()
 	pBackground->Initialize();
 
 
+    // Ground
 	Entity* pForeground{ GetEntityKeeper()->CreateEntity(0) };
 
 	pForeground->AddComponent(new Transform(pForeground, Vector2f(0, 0)));
@@ -264,6 +280,7 @@ void LevelScene::CreateLevel()
 		Vector2f(2000, 40),
 		Vector2f(2000, 0),
 	}));
+    // Elevated Ground
 	pForeground->AddComponent(new Collider(pForeground, std::vector<Vector2f>{
 		Vector2f(610 + 492, 110),
 		Vector2f(610 + 492, 110 + 10),
@@ -276,12 +293,47 @@ void LevelScene::CreateLevel()
 		Vector2f(0, 200),
 		Vector2f(0, 0),
 	}));
+    pForeground->SetTag("foreground");
 
 	pForeground->Initialize();
 
 	CreateLadder(730);
 	CreateLadder(921);
 	CreateLadder(1078);
+
+    // Stones
+    std::vector<Vector2f> stoneVector{
+                Vector2f(0, 0),
+                Vector2f(0, 12),
+                Vector2f(6, 12),
+                Vector2f(6, 0),
+    };
+	Entity* pStone{ GetEntityKeeper()->CreateEntity(0) };
+	pStone->AddComponent(new Transform(pStone, Vector2f(54, 40)));
+	pStone->AddComponent(new Collider(pStone, stoneVector));
+    pStone->SetTag("gravestone");
+	pStone->Initialize();
+
+    // Stones
+	Entity* pStone2{ GetEntityKeeper()->CreateEntity(0) };
+	pStone2->AddComponent(new Transform(pStone2, Vector2f(245, 40)));
+	pStone2->AddComponent(new Collider(pStone2, stoneVector));
+    pStone2->SetTag("gravestone");
+	pStone2->Initialize();
+
+    // Stones
+	Entity* pStone4{ GetEntityKeeper()->CreateEntity(0) };
+	pStone4->AddComponent(new Transform(pStone4, Vector2f(420, 40)));
+	pStone4->AddComponent(new Collider(pStone4, stoneVector));
+    pStone4->SetTag("gravestone");
+	pStone4->Initialize();
+
+    // Stones
+	Entity* pStone3{ GetEntityKeeper()->CreateEntity(0) };
+	pStone3->AddComponent(new Transform(pStone3, Vector2f(532, 40)));
+	pStone3->AddComponent(new Collider(pStone3, stoneVector));
+    pStone3->SetTag("gravestone");
+	pStone3->Initialize();
 }
 
 void LevelScene::CreateLadder(float xCoord) const

@@ -1,3 +1,4 @@
+#include "base.h"
 #include "pch.h"
 #include "PlayerCollider.h"
 
@@ -25,11 +26,28 @@ void PlayerCollider::OnCollisionEnter(Collider* other, float deltaTime)
 {
 	if (other->CompareTag("Ladder"))
 	{
+        DPRINTF("PlayerCollider::OnCollisionEnter: Ladder\n");
 		m_pTouchedLadder = dynamic_cast<LadderCollider*>(other);
-	}
-	else if (other->CompareTag("Enemy"))
+	} else if(other->CompareTag("foreground"))
 	{
-		m_pPlayerController->Damage(other->GetTransform()->GetPosition());
+        DPRINTF("PlayerCollider::OnCollisionEnter: foreground\n");
+	} else if(other->CompareTag("gravestone"))
+    {
+        m_pPlayerController->Event("gravestone:on");
+    }
+}
+
+void PlayerCollider::OnCollisionUpdate(Collider* other, float deltaTime)
+{
+	if(other->CompareTag("Ladder")) {
+        DPRINTF("PlayerCollider::OnCollisionUpdate: Ladder\n");
+        m_pPlayerController->Event("Ladder");
+    }
+
+	if(other->CompareTag("foreground"))
+	{
+        DPRINTF("PlayerCollider::OnCollisionUpdate: foreground\n");
+        m_pPlayerController->Event("grounded:on");
 	}
 }
 
@@ -37,8 +55,19 @@ void PlayerCollider::OnCollisionExit(Collider* other, float deltaTime)
 {
 	if (other->CompareTag("Ladder"))
 	{
+        DPRINTF("PlayerCollider::OnCollisionExit: Ladder\n");
 		m_pTouchedLadder = nullptr;
 	}
+	if(other->CompareTag("foreground"))
+	{
+        DPRINTF("PlayerCollider::OnCollisionExit: foreground\n");
+		//m_pPlayerController->m_IsGrounded = false;
+        m_pPlayerController->Event("grounded:off");
+	}
+	if(other->CompareTag("gravestone"))
+    {
+        m_pPlayerController->Event("gravestone:off");
+    }
 }
 
 bool PlayerCollider::IsTouchingLadder() const

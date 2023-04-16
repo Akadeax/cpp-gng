@@ -1,6 +1,7 @@
 #pragma once
 #include "Component.h"
 #include <vector>
+#include <cmath>
 #include "Vector2f.h"
 
 class Transform;
@@ -25,6 +26,7 @@ public:
 	void SetTrigger(bool newVal);
 
 	bool CompareTag(const std::string& tag) const;
+	std::string GetTag() const;
 
 	std::vector<Vector2f>& GetBaseVertices();
 	void SetBaseVertices(std::vector<Vector2f> newVertices);

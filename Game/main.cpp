@@ -6,6 +6,9 @@
 #include "Game.h"
 #include "GhostsAndGoblins.h"
 
+#ifndef _WIN32
+#  define SDL_main main
+#endif
 
 void StartHeapControl();
 void DumpMemoryLeaks();
@@ -21,7 +24,7 @@ int SDL_main(int argv, char** args)
 		constants::SCREEN_WIDTH,
 		constants::SCREEN_HEIGHT,
 		false
-	} } };
+       } } };
 	pGame->Run();
 	delete pGame;
 	DumpMemoryLeaks();

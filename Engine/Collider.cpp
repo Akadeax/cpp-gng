@@ -95,6 +95,10 @@ void Collider::SetTrigger(bool newVal)
 	m_IsTrigger = newVal;
 }
 
+std::string Collider::GetTag() const
+{
+	return m_pParent->GetTag();
+}
 bool Collider::CompareTag(const std::string& tag) const
 {
 	return m_pParent->GetTag() == tag;

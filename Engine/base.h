@@ -2,12 +2,19 @@
 
 //ML Detection Extension
 #ifdef _DEBUG
-#define _CRTDBG_MAP_ALLOC
-#include <cstdlib>
-#include <crtdbg.h>
-#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
-#define new DEBUG_NEW
+#  define _CRTDBG_MAP_ALLOC
+#  include <cstdlib>
+#  include <crtdbg.h>
+#  define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#  define new DEBUG_NEW
+// Basic C debug logger, could use something like https://github.com/SergiusTheBest/plog
+#  define DPRINTF(msg, ...) \
+      printf("[%s:%s] %s", __FILE__, __LINE__, msg, __VA_ARGS__);
+#else
+#  define DPRINTF(...)
 #endif
+
+const char* BSTR(const bool b);
 
 // SDL libs
 #pragma comment(lib, "SDL2.lib")
@@ -33,3 +40,4 @@
 
 #pragma warning(default : 26812)
 #include "structs.h"
+

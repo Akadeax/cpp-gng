@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Vector2f.h"
+#include <values.h>
 
 namespace collisions
 {

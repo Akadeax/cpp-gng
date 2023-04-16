@@ -10,7 +10,7 @@ class Scene
 {
 public:
 	explicit Scene();
-	explicit Scene(Camera* pCamera);
+	explicit Scene(Camera* pCamera, std::string ResourcesFolder);
 	Scene& operator=(const Scene& rhs) = delete;
 	Scene& operator=(Scene&& rhs) = delete;
 	Scene(const Scene& rhs) = delete;

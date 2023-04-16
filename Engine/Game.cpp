@@ -3,10 +3,12 @@
 
 #include <iostream>
 #include <algorithm>
+#include <thread>
 #include <chrono>
 
 #include "InputHandler.h"
 #include "Scene.h"
+#include <unistd.h>
 
 Game::Game(const Window& window, Scene* pStartScene)
 	: m_Window{ window }
@@ -103,14 +105,12 @@ void Game::InitializeGameEngine()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Initialize PNG loading
-	/*
 	int imgFlags = IMG_INIT_PNG;
 	if ( !( IMG_Init( imgFlags ) & imgFlags ) )
 	{
 		std::cerr << "Game::Initialize( ), error when calling IMG_Init: " << IMG_GetError( ) << std::endl;
 		return;
 	}
-	*/
 
 	// Initialize SDL_ttf
 	if (TTF_Init() == -1)
@@ -147,12 +147,14 @@ void Game::Run()
 
 	// Set start time
 	std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
+    std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
+    float elapsedSeconds = 0;
 
 	//The event loop
 	SDL_Event e{};
 	while (!quit)
 	{
-
+        std::this_thread::sleep_for(std::chrono::microseconds(16000)); // ~62fps
 		// Poll next event from queue
 		while (SDL_PollEvent(&e) != 0)
 		{
@@ -168,15 +170,17 @@ void Game::Run()
 		if (quit) return;
 
 		// Get current time
-		std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
+		t2 = std::chrono::steady_clock::now();
 
 		// Calculate elapsed time
-		float elapsedSeconds = std::chrono::duration<float>(t2 - t1).count();
+		elapsedSeconds = std::chrono::duration<float>(t2 - t1).count();
 		// Update current time
 		t1 = t2;
 
 		// Prevent jumps in time caused by break points
 		elapsedSeconds = std::min(elapsedSeconds, m_MaxElapsedSeconds);
+        // Controls the speed of the game overall
+        elapsedSeconds *= 1.2;
 		// Call the Game object's Update function, using time in seconds (!)
 		this->Update(elapsedSeconds);
 

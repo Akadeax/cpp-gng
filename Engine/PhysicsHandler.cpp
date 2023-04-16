@@ -59,14 +59,20 @@ std::pair<bool, Collider*> PhysicsHandler::Linecast(Vector2f p1, Vector2f p2, co
 	{
 		if (!hitTriggers && currentCollider->IsTrigger()) continue;
 
+        DPRINTF("PhysicsHandler::Linecast: Check colliders [%s]?=[%s]\n",tag.c_str(), currentCollider->GetTag().c_str());
+
 		if (collisions::IntersectLinePolygon(p1, p2, currentCollider->GetTransformedVertices()))
 		{
 			// Check if tag of hit object is correct
 			// or we're not checking for tag
-			if (tag.empty() || currentCollider->CompareTag(tag))
+            //if (currentCollider->CompareTag(tag))
+            if (tag.empty() || currentCollider->CompareTag(tag))
 			{
+                DPRINTF("PhysicsHandler::Linecast: TRUE tag=[%s] hit tag=[%s]\n", tag.c_str(), currentCollider->GetTag().c_str() );
 				return std::make_pair(true, currentCollider);
-			}
+			} else {
+                DPRINTF("PhysicsHandler::Linecast: FALSE tag=[%s] hit tag=[%s]\n", tag.c_str(), currentCollider->GetTag().c_str() );
+            }
 		}
 	}
 	return std::make_pair(false, nullptr);
@@ -84,7 +90,7 @@ void PhysicsHandler::ResolveCollisions(float deltaTime) const
 		for (Collider* collider : m_Colliders)
 		{
 			if (physicsBody->GetCollider()->GetParent() == collider->GetParent()) continue;
-			if (collider->IsTrigger() || !collider->GetParent()->IsActive() || !collider->IsEnabled()) continue;
+			if (collider->IsTrigger() || !collider->GetParent()->IsActive()) continue;
 
 			collisions::CollisionHitInfo currentCollision = collisions::IntersectPolygons(
 				physicsBody->GetCollider()->GetTransformedVertices(),
@@ -108,7 +114,7 @@ void PhysicsHandler::NotifyColliders(float deltaTime)
 	{
 		for (Collider* collider : m_Colliders)
 		{
-			if (!collider->GetParent()->IsActive() || !collider->IsEnabled()) continue;
+			if (!collider->GetParent()->IsActive()) continue;
 
 			if (physicsBody->GetCollider()->GetParent() == collider->GetParent()) continue;
 
@@ -150,4 +156,9 @@ void PhysicsHandler::NotifyColliders(float deltaTime)
 			}
 		}
 	}
+}
+
+std::map<std::pair<PhysicsBody*, Collider*>, bool> PhysicsHandler::GetCollisions()
+{
+    return m_LastFrameCollisions;
 }

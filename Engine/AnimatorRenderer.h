@@ -2,6 +2,7 @@
 
 #include "Renderer.h"
 #include <unordered_map>
+#include <list>
 
 class AnimatorState;
 class AnimatorTransition;

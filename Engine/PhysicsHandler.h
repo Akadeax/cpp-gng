@@ -25,6 +25,8 @@ public:
 	void RemoveCollider(Collider* collider);
 	void RemovePhysicsBody(PhysicsBody* physicsBody);
 
+    std::map<std::pair<PhysicsBody*, Collider*>, bool> GetCollisions();
+
 	std::pair<bool, Collider*> Linecast(Vector2f p1, Vector2f p2, const std::string& tag = "", bool hitTriggers = false) const;
 
 private:

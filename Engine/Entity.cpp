@@ -15,6 +15,7 @@ std::vector<Component*> Entity::GetComponents() const
 
 void Entity::Initialize() const
 {
+    printf("Entity:Initialize %s\n", m_Tag.c_str());
 	for (Component* component : m_Components)
 	{
 		component->Initialize();

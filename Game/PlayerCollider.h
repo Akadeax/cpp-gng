@@ -12,6 +12,7 @@ public:
 
 	void Initialize() override;
 	void OnCollisionEnter(Collider* other, float deltaTime) override;
+	void OnCollisionUpdate(Collider* other, float deltaTime) override;
 	void OnCollisionExit(Collider* other, float deltaTime) override;
 
 	bool IsTouchingLadder() const;

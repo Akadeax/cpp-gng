@@ -25,6 +25,7 @@ private:
 	ProjectilePool* m_pProjectilePool{};
 
 	Entity* m_pPlayer{};
+	Entity* m_pTestLadder{};
 
 	Zombie* m_pEnemy{};
 

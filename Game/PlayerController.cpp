@@ -1,7 +1,9 @@
+#include "base.h"
 #include "pch.h"
 #include "PlayerController.h"
 
 #include <cassert>
+#include <algorithm>
 
 #include "AnimatorRenderer.h"
 #include "Entity.h"
@@ -43,22 +45,29 @@ void PlayerController::Initialize()
 
 void PlayerController::Update(float deltaTime)
 {
-	CheckGrounded(deltaTime);
+    DPRINTF("DELTATIME=%f\n", deltaTime);
+
+	CheckCollisions(deltaTime);
 
 	if (!m_IsGrounded && !m_IsClimbing)
 	{
 		// Apply gravity if we're not grounded
-		m_pPhysicsBody->AddVelocity(Vector2f(0, -m_GravityScale * deltaTime));
+        DPRINTF("1.0: Y Velocity = %s\n", m_pPhysicsBody->GetVelocity().ToString().c_str());
+		m_pPhysicsBody->AddVelocity(Vector2f(0, -(m_GravityScale * (deltaTime*3))));
+        DPRINTF("1.1: Y Velocity = %s\n", m_pPhysicsBody->GetVelocity().ToString().c_str());
+        DPRINTF("!m_isGrounded && ! m_IsClimbing                  \n");
 	}
 	else if (m_IsGrounded && !m_IsClimbing)
 	{
 		// Reset velocity, otherwise gravity pulls into the ground;
 		// if we'd reset to 0 the ground would never register collision
-		m_pPhysicsBody->SetYVelocity(-5);
+		m_pPhysicsBody->SetYVelocity(-0.1);
+        DPRINTF("     m_isGrounded && ! m_IsClimbing              \n");
 	}
 	else if (m_IsClimbing)
 	{
 		m_pPhysicsBody->SetYVelocity(0);
+        DPRINTF("m_IsClimbing                                     \n");
 	}
 
 	m_pAnimator->SetParameter("isHurt", m_HurtTimer > 0);
@@ -69,13 +78,18 @@ void PlayerController::Update(float deltaTime)
 		return;
 	}
 
+    // Stops the user from input when inhibited
+    if( m_inhibitTimer <= 0) {
+        UpdateJumping();
+        UpdateLadderMovement();
+        UpdateGroundMovement();
+    } else {
+        // Mover timer forward, clamp from 0 to 5 game seconds
+        m_inhibitTimer = std::clamp(0.f, m_inhibitTimer - deltaTime, 5.f);
+    }
 
-	UpdateGroundMovement();
-
-	UpdateLadderMovement();
-
-	UpdateJumping();
 	UpdateShooting(deltaTime);
+    DPRINTF("2: Y Velocity = %s\n", m_pPhysicsBody->GetVelocity().ToString().c_str());
 }
 
 void PlayerController::Draw() const
@@ -88,17 +102,45 @@ void PlayerController::Draw() const
 	utils::DrawLine(bottomLeft.ToPoint2f(), bottomRight.ToPoint2f());
 }
 
+void PlayerController::Event(std::string name) {
+    Vector2f a={}, b={};
+    Event(name, a, b);
+}
+
+// Basic eventing, could be better using lambdas?
+void PlayerController::Event(std::string name, Vector2f move, Vector2f accel)
+{
+    if(name == "Ladder") {
+        DPRINTF("PC:Event: On Ladder\n");
+        // Test
+		//m_pPhysicsBody->SetXVelocity(0);
+        //m_inhibitTimer = 0.1f; // 1 second of pause
+    } else if(name == "gravestone:on") {
+        m_IsGrounded = true;
+    } else if(name == "gravestone:off") {
+        m_IsGrounded = false;
+        // This would make the character drop after exit, but I like the jump off better...
+		//m_pPhysicsBody->SetXVelocity(0);
+    } else if(name == "grounded:on") {
+        m_IsGrounded = true;
+    } else if(name == "grounded:off") {
+        m_IsGrounded = false;
+    }
+}
+
 void PlayerController::Damage(Vector2f from)
 {
 	if (m_HasArmor)
 	{
 		m_HasArmor = false;
 		m_HurtTimer = m_DamagedInactiveTime;
+        m_inhibitTimer = 0.5f;
 	}
 	else
 	{
 		// Dead
 		m_HurtTimer = 100.f;
+        m_inhibitTimer = 0.5f;
 	}
 
 	const Vector2f hitDirection{ from - m_pTransform->GetPosition() };
@@ -113,6 +155,7 @@ void PlayerController::UpdateGroundMovement()
 {
 	int moveDir{ GetInputHandler()->GetAxis("left", "right") };
 
+    DPRINTF("UpdateGroundMovement: moveDir=%d m_IsClimbing = %s\n", BSTR(m_IsClimbing));
 	if (moveDir != 0 && !m_IsClimbing)
 	{
 		m_LookDir = moveDir;
@@ -137,8 +180,8 @@ void PlayerController::UpdateGroundMovement()
 		m_pCollider->GetBaseVertices()[2].y = m_ColliderHeight / 2;
 	}
 
-	// Disallow changing X velocity while jumping
-	if(m_IsGrounded)
+	// Disallow changing X velocity while jumping, climbing
+	if(m_IsGrounded && !m_IsClimbing)
 	{
 		m_pPhysicsBody->SetXVelocity(m_MovementSpeed * static_cast<float>(moveDir));
 	}
@@ -177,6 +220,7 @@ void PlayerController::UpdateLadderMovement()
 
 			m_pPhysicsBody->SetYVelocity(m_ClimbSpeed * static_cast<float>(ladderInput));
 		}
+        DPRINTF("UpdateLadderMovement: isMovingOnLadder m_IsClimbing=%s reachedBottom=%s reachedTop=%s\n", BSTR(m_IsClimbing), BSTR(reachedBottom), BSTR(reachedTop));
 	}
 	else if (!m_pCollider->IsTouchingLadder() && m_IsClimbing)
 	{
@@ -193,22 +237,41 @@ void PlayerController::UpdateLadderMovement()
 	}
 }
 
-void PlayerController::CheckGrounded(float deltaTime)
+void PlayerController::CheckCollisions(float deltaTime)
 {
 	// Grounded check
-	const Vector2f bottomLeft{ m_pTransform->GetPosition() + Vector2f(-m_ColliderWidth / 2 + 1, -m_ColliderHeight / 2 - 1.f) };
-	const Vector2f bottomRight{ bottomLeft + Vector2f(m_ColliderWidth - 2, 0) };
+	//const Vector2f bottomLeft{ m_pTransform->GetPosition() + Vector2f(-m_ColliderWidth / 2 + 1, -m_ColliderHeight / 2 - 1.f) };
+	//const Vector2f bottomRight{ bottomLeft + Vector2f(m_ColliderWidth - 2, 0) };
 
-	const std::pair<bool, Collider*> result{ GetPhysicsHandler()->Linecast(bottomLeft, bottomRight) };
+    DPRINTF("CheckCollisions: player=%s\n", m_pTransform->GetPosition().ToString().c_str());
 
-	m_IsGrounded = result.first;
-	m_pAnimator->SetParameter("isGrounded", m_IsGrounded);
+    // Physics be awesome
+    GetPhysicsHandler()->Update(deltaTime);
+    /*
+    std::map<std::pair<PhysicsBody*, Collider*>, bool> collisions = GetPhysicsHandler()->GetCollisions();
+    for(auto collision : collisions) {
+        DPRINTF("first = %s\n", collision.first.first->GetParent()->GetTag().c_str());
+        DPRINTF("second = %s\n", collision.first.second->GetTag().c_str());
+        //DPRINTF("hit = %s\n", collision.first.second->GetTag().c_str());
+    }
+
+	//const std::pair<bool, Collider*> result{ GetPhysicsHandler()->Linecast(bottomLeft, bottomRight, "Player") };
+
+    DPRINTF("BottomLeft = %s\n", bottomLeft.ToString().c_str());
+    DPRINTF("BottomRght = %s\n", bottomRight.ToString().c_str());
+	m_IsGrounded = true;//result.first && result.second->CompareTag("foreground");
+    */
+
+    m_pAnimator->SetParameter("isGrounded", m_IsGrounded);
+
+    DPRINTF("%s                           \n", m_IsGrounded?"GROUNDED":"NOT GROUNDED");
 }
 
-void PlayerController::UpdateJumping() const
+void PlayerController::UpdateJumping()
 {
-	if (m_IsGrounded && GetInputHandler()->GetKeyDown("jump"))
+	if (m_IsGrounded && !m_IsClimbing && GetInputHandler()->GetKeyDown("jump"))
 	{
+        DPRINTF("JUMP\n");
 		m_pPhysicsBody->SetYVelocity(m_JumpForce);
 		// Move out of ground so next frame isn't considered grounded instantly
 		m_pTransform->MovePosition(Vector2f(0, 1));

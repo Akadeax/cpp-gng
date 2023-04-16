@@ -40,6 +40,8 @@ protected:
 	bool m_Initialized;
 	// Prevent timing jumps when debugging
 	const float m_MaxElapsedSeconds;
+    // Resource directory
+    std::string m_ResourceDirectory;
 
 	Scene* m_pCurrentScene;
 	InputHandler* m_pInputHandler;

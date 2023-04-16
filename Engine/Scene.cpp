@@ -10,15 +10,15 @@
 #include "TextureCache.h"
 
 Scene::Scene()
-	: Scene(nullptr)
+	: Scene(nullptr, "")
 {
 }
 
-Scene::Scene(Camera* pCamera)
+Scene::Scene(Camera* pCamera, std::string ResourcesFolder)
 	: m_pGame{ nullptr }
 	, m_pEntityKeeper{ new EntityKeeper(this) }
 	, m_pPhysicsHandler{ new PhysicsHandler() }
-	, m_pTextureCache{ new TextureCache() }
+	, m_pTextureCache{ new TextureCache(ResourcesFolder) }
 	, m_pCamera{ pCamera }
 {
 }

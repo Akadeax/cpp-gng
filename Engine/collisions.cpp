@@ -124,6 +124,7 @@ bool collisions::IntersectLinePolygon(Vector2f p1, Vector2f p2, const std::vecto
 {
 	if (IntersectPointPolygon(p1, vertices)) return true;
 
+    DPRINTF("IntersectLinePolygon: size=%zu\n", vertices.size());
 	// http://jeffreythompson.org/collision-detection/poly-line.php
 	const size_t vertexAmount{ vertices.size() };
 	for (size_t i{ 0 }; i < vertexAmount; i++)
@@ -132,6 +133,12 @@ bool collisions::IntersectLinePolygon(Vector2f p1, Vector2f p2, const std::vecto
 		const Vector2f vB{ vertices[(i + 1) % vertexAmount] };
 
 		const bool hit{ IntersectLines(p1, p2, vA, vB) };
+        DPRINTF("IntersectLinePolygon %s p1=%s p2=%s vA=%s vB= %s\n", 
+            hit?"HIT ":"MISS",
+            p1.ToString().c_str(),
+            p2.ToString().c_str(),
+            vA.ToString().c_str(),
+            vB.ToString().c_str());
 		if (hit) return true;
 	}
 
@@ -157,6 +164,8 @@ bool collisions::IntersectPointPolygon(Vector2f p1, const std::vector<Vector2f>&
 	bool collision{ false };
 
 	const size_t vertexAmount{ vertices.size() };
+    DPRINTF("IntersectPointPolygon vertices.size=%zu\n", vertices.size());
+
 	for (size_t i{ 0 }; i < vertexAmount; i++)
 	{
 		const Vector2f vCurrent{ vertices[i] };
@@ -167,6 +176,11 @@ bool collisions::IntersectPointPolygon(Vector2f p1, const std::vector<Vector2f>&
 			(p1.x < (vNext.x - vCurrent.x) * (p1.y - vCurrent.y) / (vNext.y - vCurrent.y) + vCurrent.x)) {
 			collision = !collision;
 		}
+        DPRINTF("IntersectPointPolygon %s p1=%s vCurrent=%s vNext= %s\n", 
+            collision?"HIT ":"MISS",
+            p1.ToString().c_str(),
+            vCurrent.ToString().c_str(),
+            vNext.ToString().c_str());
 	}
 
 	return collision;

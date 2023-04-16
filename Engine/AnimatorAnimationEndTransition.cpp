@@ -1,4 +1,5 @@
 #include "base.h"
+#include <list>
 #include "AnimatorAnimationEndTransition.h"
 
 #include "Animation.h"

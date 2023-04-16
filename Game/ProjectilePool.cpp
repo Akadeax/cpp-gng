@@ -15,7 +15,7 @@ ProjectilePool::ProjectilePool(const LevelScene* pLevelScene)
 
 	const int projectilePoolAmount{ 10 };
 
-	Texture* pProjectilesTexture{ pLevelScene->GetTextureCache()->LoadTexture("projectiles", "projectiles.png")};
+	Texture* pProjectilesTexture{ pLevelScene->GetTextureCache()->LoadTexture("projectiles", "Resources/projectiles.png")};
 	m_Projectiles = std::vector<Projectile*>(projectilePoolAmount);
 
 	for (size_t i{ 0 }; i < projectilePoolAmount; ++i)
