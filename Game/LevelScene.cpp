@@ -279,9 +279,9 @@ void LevelScene::CreateLevel()
 
 	pForeground->Initialize();
 
-	CreateLadder(730);
-	CreateLadder(921);
-	CreateLadder(1078);
+	CreateLadder(727);
+	CreateLadder(919);
+	CreateLadder(1075);
 }
 
 void LevelScene::CreateLadder(float xCoord) const

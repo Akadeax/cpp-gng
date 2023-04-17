@@ -122,7 +122,7 @@ void PlayerController::UpdateGroundMovement()
 	m_pAnimator->SetParameter("isWalking", moveDir != 0);
 
 	// Crouching
-	m_IsCrouched = GetInputHandler()->GetKeyPressed("down") && m_IsGrounded;
+	m_IsCrouched = GetInputHandler()->GetKeyPressed("down") && m_IsGrounded && !m_IsClimbing;
 	m_pAnimator->SetParameter("isCrouched", m_IsCrouched);
 
 	if(m_IsCrouched)
@@ -138,7 +138,7 @@ void PlayerController::UpdateGroundMovement()
 	}
 
 	// Disallow changing X velocity while jumping
-	if(m_IsGrounded)
+	if(m_IsGrounded && !m_IsClimbing)
 	{
 		m_pPhysicsBody->SetXVelocity(m_MovementSpeed * static_cast<float>(moveDir));
 	}
@@ -207,7 +207,7 @@ void PlayerController::CheckGrounded(float deltaTime)
 
 void PlayerController::UpdateJumping() const
 {
-	if (m_IsGrounded && GetInputHandler()->GetKeyDown("jump"))
+	if (!m_IsClimbing && m_IsGrounded && GetInputHandler()->GetKeyDown("jump"))
 	{
 		m_pPhysicsBody->SetYVelocity(m_JumpForce);
 		// Move out of ground so next frame isn't considered grounded instantly
