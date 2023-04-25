@@ -153,6 +153,9 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemySpawner.cpp" />
+    <ClCompile Include="SpawnerKeeper.cpp" />
     <ClCompile Include="GhostsAndGoblins.cpp" />
     <ClCompile Include="LadderCollider.cpp" />
     <ClCompile Include="LevelScene.cpp" />
@@ -175,6 +178,9 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constants.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemySpawner.h" />
+    <ClInclude Include="SpawnerKeeper.h" />
     <ClInclude Include="GhostsAndGoblins.h" />
     <ClInclude Include="LadderCollider.h" />
     <ClInclude Include="LevelScene.h" />

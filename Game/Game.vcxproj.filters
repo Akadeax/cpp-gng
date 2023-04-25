@@ -56,6 +56,15 @@
     <ClCompile Include="Zombie.cpp">
       <Filter>Source\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="SpawnerKeeper.cpp">
+      <Filter>Source\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Source\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemySpawner.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GhostsAndGoblins.h">
@@ -90,6 +99,15 @@
     </ClInclude>
     <ClInclude Include="Zombie.h">
       <Filter>Source\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="SpawnerKeeper.h">
+      <Filter>Source\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Source\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemySpawner.h">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -81,6 +81,9 @@ struct Vector2f final
 	// -------------------------
 	float x;
 	float y;
+
+
+	float GetDistance(Vector2f other) const;
 };
 // -------------------------
 // Non member operators

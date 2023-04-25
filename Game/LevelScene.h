@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "Vector2f.h"
 
+class SpawnerKeeper;
 class Zombie;
 class ProjectilePool;
 class Transform;
@@ -18,11 +19,13 @@ public:
 	void DrawScene() const override;
 
 	ProjectilePool* GetProjectilePool() const;
+	SpawnerKeeper* GetSpawnerKeeper() const;
 
 	Entity* GetPlayer() const;
 
 private:
 	ProjectilePool* m_pProjectilePool{};
+	SpawnerKeeper* m_pSpawnerKeeper{};
 
 	Entity* m_pPlayer{};
 

@@ -20,18 +20,18 @@
 #include "PlayerCamera.h"
 #include "PlayerCollider.h"
 #include "ProjectilePool.h"
+#include "SpawnerKeeper.h"
 #include "Texture.h"
 #include "TextureCache.h"
 #include "Transform.h"
 #include "Zombie.h"
-
-
 
 void LevelScene::InitializeScene()
 {
 	std::cout << "Controls:\nArrows keys: move\nJ: jump\nK: shoot";
 
 	m_pProjectilePool = new ProjectilePool(this);
+	m_pSpawnerKeeper = new SpawnerKeeper(this);
 
 	CreatePlayer();
 
@@ -49,6 +49,7 @@ void LevelScene::InitializeScene()
 LevelScene::~LevelScene()
 {
 	delete m_pProjectilePool;
+	delete m_pSpawnerKeeper;
 }
 
 void LevelScene::UpdateScene(float deltaTime)
@@ -75,6 +76,11 @@ void LevelScene::DrawScene() const
 ProjectilePool* LevelScene::GetProjectilePool() const
 {
 	return m_pProjectilePool;
+}
+
+SpawnerKeeper* LevelScene::GetSpawnerKeeper() const
+{
+	return m_pSpawnerKeeper;
 }
 
 Entity* LevelScene::GetPlayer() const

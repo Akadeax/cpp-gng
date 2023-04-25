@@ -157,6 +157,11 @@ Vector2f::operator Point2f()
 	return Point2f{ x,y };
 }
 
+float Vector2f::GetDistance(Vector2f other) const
+{
+	return (*this - other).Length();
+}
+
 // -------------------------
 // Non-member operators
 // -------------------------
