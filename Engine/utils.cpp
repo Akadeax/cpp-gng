@@ -693,4 +693,9 @@ bool utils::IntersectRectLine(const Rectf& r, const Point2f& p1, const Point2f& 
 	return true;
 }
 
+int utils::RandomInRange(int minInclusive, int maxInclusive)
+{
+	return rand() % (maxInclusive - minInclusive + 1) + minInclusive;
+}
+
 #pragma endregion CollisionFunctionality

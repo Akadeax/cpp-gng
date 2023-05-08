@@ -34,3 +34,4 @@ void Camera::Draw() const
 
 	glTranslatef(-m_Position.x, -m_Position.y, 0);
 }
+

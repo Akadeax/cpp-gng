@@ -84,4 +84,5 @@ namespace utils
 
 #pragma endregion CollisionFunctionality
 
+	int RandomInRange(int minInclusive, int maxInclusive);
 }

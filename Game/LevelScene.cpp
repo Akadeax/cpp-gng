@@ -9,6 +9,8 @@
 #include "Camera.h"
 #include "Collider.h"
 #include "ConditionalAnimatorTransition.h"
+#include "Enemy.h"
+#include "EnemySpawner.h"
 #include "Entity.h"
 
 #include "EntityKeeper.h"
@@ -24,53 +26,53 @@
 #include "Texture.h"
 #include "TextureCache.h"
 #include "Transform.h"
-#include "Zombie.h"
 
 void LevelScene::InitializeScene()
 {
 	std::cout << "Controls:\nArrows keys: move\nJ: jump\nK: shoot";
 
+	CreatePlayer();
+
 	m_pProjectilePool = new ProjectilePool(this);
 	m_pSpawnerKeeper = new SpawnerKeeper(this);
-
-	CreatePlayer();
 
 	m_pCamera = new PlayerCamera(m_pPlayer->GetComponent<Transform>());
 	// Center camera at start
 	m_pCamera->MovePosition(Vector2f(-450, -300));
 
-	CreateEnemy();
-
 	CreateLevel();
 
+	const float spawnerDistFromBorder{ 20.f };
+	const int spawnerAmount{ 20 };
+	const float spawnerIntervalDist{ 60.f };
+	const float spawnerHeight{ 55.f };
+
+	for(int i{}; i < spawnerAmount; ++i)
+	{
+		CreateZombieSpawner(Vector2f(spawnerDistFromBorder + spawnerIntervalDist * static_cast<float>(i), spawnerHeight));
+	}
 }
 
 
 LevelScene::~LevelScene()
 {
-	delete m_pProjectilePool;
 	delete m_pSpawnerKeeper;
+	delete m_pProjectilePool;
 }
 
 void LevelScene::UpdateScene(float deltaTime)
 {
+	m_pSpawnerKeeper->Update(deltaTime);
+
 	// Parallax the background
 	const float newXPos{ (m_pCamera->GetPosition().x * 0.2f) };
 	m_pBackgroundTransform->SetPosition(Vector2f(newXPos, 0));
-
-	// Debug for enemy spawn
-	if (SDL_GetKeyboardState(nullptr)[SDL_SCANCODE_SPACE] && !m_pEnemy->GetParent()->IsActive())
-	{
-		m_pEnemy->GetParent()->SetActive(true);
-
-		m_pEnemy->Reset();
-		m_pEnemy->GetParent()->GetComponent<Transform>()->SetPosition(Vector2f(150, 55));
-	}
 }
 
 void LevelScene::DrawScene() const
 {
 	m_pPhysicsHandler->DrawDebugColliders();
+	m_pSpawnerKeeper->DrawDebugRadius();
 }
 
 ProjectilePool* LevelScene::GetProjectilePool() const
@@ -126,7 +128,7 @@ void LevelScene::CreatePlayer()
 			new AnimationFrame(0.15f, Rectf(spriteWidth * 0, spriteHeight * 3, spriteWidth, spriteHeight)),
 			new AnimationFrame(0.15f, Rectf(spriteWidth * 1, spriteHeight * 3, spriteWidth, spriteHeight)),
 		}))},
-	{ "hurt", new AnimatorState(new Animation(std::vector<AnimationFrame*>{	
+	{ "hurt", new AnimatorState(new Animation(std::vector<AnimationFrame*>{
 			new AnimationFrame(1.f, Rectf(spriteWidth * 0, spriteHeight * 5, spriteWidth, spriteHeight)),
 		}))},
 	};
@@ -189,59 +191,6 @@ void LevelScene::CreatePlayer()
 	m_pPlayer->Initialize();
 }
 
-void LevelScene::CreateEnemy()
-{
-	Texture* pTexture{ GetTextureCache()->LoadTexture("zombie", "zombie.png") };
-	Entity* pEnemy = m_pEntityKeeper->CreateEntity(5, "Enemy");
-
-	pEnemy->AddComponent(new Transform(pEnemy, Vector2f(150, 55)));
-
-	// RENDERING
-	const float spriteWidth{ 22.f };
-	const float spriteHeight{ 30.f };
-
-	const std::unordered_map<std::string, AnimatorState*> enemyStates
-	{
-	{ "walk", new AnimatorState(new Animation(std::vector<AnimationFrame*>{
-			new AnimationFrame(0.25f, Rectf(spriteWidth * 5, spriteHeight * 1, spriteWidth, spriteHeight)),
-			new AnimationFrame(0.25f, Rectf(spriteWidth * 6, spriteHeight * 1, spriteWidth, spriteHeight)),
-		}))},
-	{ "death", new AnimatorState(new Animation(std::vector<AnimationFrame*>{
-			new AnimationFrame(0.1f, Rectf(spriteWidth * 7, spriteHeight * 1, spriteWidth, spriteHeight)),
-			new AnimationFrame(0.1f, Rectf(spriteWidth * 8, spriteHeight * 1, spriteWidth, spriteHeight)),
-			new AnimationFrame(0.1f, Rectf(spriteWidth * 9, spriteHeight * 1, spriteWidth, spriteHeight)),
-		}))},
-	};
-
-	const std::list<AnimatorTransition*> enemyTransitions
-	{
-		new ConditionalAnimatorTransition("walk", "death", "isDead", true),
-	};
-
-	pEnemy->AddComponent(new AnimatorRenderer(
-		pEnemy,
-		pTexture, 
-		enemyStates, 
-		enemyTransitions, 
-"walk"
-	));
-
-	// LOGIC
-	pEnemy->AddComponent(new Collider(pEnemy, std::vector<Vector2f>{
-		Vector2f(-spriteWidth / 2, -spriteHeight / 2),
-		Vector2f(-spriteWidth / 2, spriteHeight / 2),
-		Vector2f(spriteWidth / 2, spriteHeight / 2),
-		Vector2f(spriteWidth / 2, -spriteHeight / 2),
-	}));
-
-	pEnemy->AddComponent(new PhysicsBody(pEnemy));
-
-	m_pEnemy = new Zombie(pEnemy, this);
-	pEnemy->AddComponent(m_pEnemy);
-
-	pEnemy->Initialize();
-}
-
 void LevelScene::CreateLevel()
 {
 	Texture* foreground{ m_pTextureCache->LoadTexture("level1Foreground", "level1Foreground.png") };
@@ -258,7 +207,7 @@ void LevelScene::CreateLevel()
 	pBackground->Initialize();
 
 
-	Entity* pForeground{ GetEntityKeeper()->CreateEntity(0) };
+	Entity* pForeground{ GetEntityKeeper()->CreateEntity(-5) };
 
 	pForeground->AddComponent(new Transform(pForeground, Vector2f(0, 0)));
 	pForeground->AddComponent(new Renderer(pForeground, foreground));
@@ -266,21 +215,21 @@ void LevelScene::CreateLevel()
 	// Hardcoded values for map collision TODO: json-ify
 	pForeground->AddComponent(new Collider(pForeground, std::vector<Vector2f>{
 		Vector2f(0, 0),
-		Vector2f(0, 40),
-		Vector2f(2000, 40),
-		Vector2f(2000, 0),
+			Vector2f(0, 40),
+			Vector2f(2000, 40),
+			Vector2f(2000, 0),
 	}));
 	pForeground->AddComponent(new Collider(pForeground, std::vector<Vector2f>{
 		Vector2f(610 + 492, 110),
-		Vector2f(610 + 492, 110 + 10),
-		Vector2f(610, 110 + 10),
-		Vector2f(610, 110),
+			Vector2f(610 + 492, 110 + 10),
+			Vector2f(610, 110 + 10),
+			Vector2f(610, 110),
 	}));
 	pForeground->AddComponent(new Collider(pForeground, std::vector<Vector2f>{
 		Vector2f(-5, 0),
-		Vector2f(-5, 200),
-		Vector2f(0, 200),
-		Vector2f(0, 0),
+			Vector2f(-5, 200),
+			Vector2f(0, 200),
+			Vector2f(0, 0),
 	}));
 
 	pForeground->Initialize();
@@ -306,4 +255,11 @@ void LevelScene::CreateLadder(float xCoord) const
 	}));
 
 	pLadder1->Initialize();
+}
+
+void LevelScene::CreateZombieSpawner(Vector2f pos) const
+{
+	Entity* pSpawner1{ GetEntityKeeper()->CreateEntity() };
+	pSpawner1->AddComponent(new Transform(pSpawner1, pos));
+	pSpawner1->AddComponent(new EnemySpawner(pSpawner1, this, SpawnerType::random, EnemyType::zombie));
 }

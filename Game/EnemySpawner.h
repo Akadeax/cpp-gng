@@ -1,15 +1,26 @@
 #pragma once
 #include <Component.h>
 
+#include "Vector2f.h"
+
+enum class EnemyType;
 class LevelScene;
+
+enum class SpawnerType
+{
+	random, set
+};
 
 class EnemySpawner final : public Component
 {
 public:
-	EnemySpawner(Entity* pParent, LevelScene* pScene);
-	~EnemySpawner() override;
+	EnemySpawner(Entity* pParent, const LevelScene* pScene, SpawnerType spawnerType, EnemyType enemyType);
+
+	Vector2f GetPosition() const;
+	EnemyType GetEnemyType() const;
 
 private:
-	LevelScene* m_pLevelScene;
+	SpawnerType m_SpawnerType;
+	EnemyType m_EnemyType;
 };
 

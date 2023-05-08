@@ -63,6 +63,11 @@ Game* Scene::GetGame() const
 	return m_pGame;
 }
 
+Camera* Scene::GetCamera() const
+{
+	return m_pCamera;
+}
+
 EntityKeeper* Scene::GetEntityKeeper() const
 {
 	return m_pEntityKeeper;

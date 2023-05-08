@@ -179,6 +179,7 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
   <ItemGroup>
     <ClInclude Include="constants.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyPool.h" />
     <ClInclude Include="EnemySpawner.h" />
     <ClInclude Include="SpawnerKeeper.h" />
     <ClInclude Include="GhostsAndGoblins.h" />

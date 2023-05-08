@@ -3,16 +3,23 @@
 
 #include <cassert>
 
+#include "Animation.h"
+#include "AnimationFrame.h"
+#include "AnimatorAnimationEndTransition.h"
 #include "AnimatorRenderer.h"
+#include "AnimatorState.h"
 #include "Entity.h"
-#include "EntityKeeper.h"
 #include "LevelScene.h"
 #include "PhysicsBody.h"
 #include "Transform.h"
 #include "Collider.h"
+#include "ConditionalAnimatorTransition.h"
+#include "EntityKeeper.h"
+#include "TextureCache.h"
+
 
 Zombie::Zombie(Entity* pParent, LevelScene* pLevelScene)
-	: Component(pParent)
+	: Enemy(pParent)
 	, m_pLevelScene{ pLevelScene }
 {
 }
@@ -33,7 +40,7 @@ void Zombie::Initialize()
 
 void Zombie::Update(float deltaTime)
 {
-	if (!m_IsDead)
+	if (m_Spawned && !m_IsDead)
 	{
 		m_pAnimator->SetFlipX(m_pPhysicsBody->GetVelocity().x < 0);
 
@@ -41,17 +48,37 @@ void Zombie::Update(float deltaTime)
 		const float directionTowardsPlayer{ isRightOfPlayer ? -1.f : 1.f };
 
 		m_pPhysicsBody->SetXVelocity(directionTowardsPlayer * m_WalkSpeed);
-
 		return;
 	}
 
-	if (m_CurrentDeathTime > 0.f)
+
+	if (!m_Spawned)
 	{
-		m_CurrentDeathTime -= deltaTime;
+		const bool isRightOfPlayer{ m_pTransform->GetPosition().x > m_pPlayer->GetPosition().x };
+		m_pAnimator->SetFlipX(isRightOfPlayer);
+
+		if (m_CurrentSpawnTime > 0.f)
+		{
+			m_CurrentSpawnTime -= deltaTime;
+		}
+		else
+		{
+			m_pCollider->SetEnabled(true);
+			m_Spawned = true;
+		}
 	}
-	else
+	
+
+	if(m_IsDead)
 	{
-		GetParent()->SetActive(false);
+		if (m_CurrentDeathTime > 0.f)
+		{
+			m_CurrentDeathTime -= deltaTime;
+		}
+		else
+		{
+			GetParent()->SetActive(false);
+		}
 	}
 }
 
@@ -68,11 +95,77 @@ void Zombie::Damage()
 	m_IsDead = true;
 }
 
-void Zombie::Reset()
+void Zombie::ResetEnemy()
 {
+	m_pAnimator->SetState("spawn");
+
 	m_IsDead = false;
-	m_pAnimator->SetState("walk");
 	m_pAnimator->SetParameter("isDead", false);
 
-	m_pCollider->SetEnabled(true);
+	m_Spawned = false;
+
+	m_pCollider->SetEnabled(false);
+	m_CurrentSpawnTime = m_SpawnTime;
+}
+
+Zombie* Zombie::CreateZombie(LevelScene* pScene)
+{
+	Texture* pTexture{ pScene->GetTextureCache()->LoadTexture("zombie", "zombie.png") };
+	Entity* pEnemy{ pScene->GetEntityKeeper()->CreateEntity(5, "Enemy") };
+
+	pEnemy->AddComponent(new Transform(pEnemy, Vector2f(150, 55)));
+
+	// RENDERING
+	const float spriteWidth{ 22.f };
+	const float spriteHeight{ 30.f };
+
+	const std::unordered_map<std::string, AnimatorState*> enemyStates
+	{
+	{ "spawn", new AnimatorState(new Animation(std::vector<AnimationFrame*>{
+			new AnimationFrame(0.1f, Rectf(spriteWidth * 0, spriteHeight * 1, spriteWidth, spriteHeight)),
+			new AnimationFrame(0.1f, Rectf(spriteWidth * 1, spriteHeight * 1, spriteWidth, spriteHeight)),
+			new AnimationFrame(0.1f, Rectf(spriteWidth * 2, spriteHeight * 1, spriteWidth, spriteHeight)),
+			new AnimationFrame(0.1f, Rectf(spriteWidth * 3, spriteHeight * 1, spriteWidth, spriteHeight)),
+			new AnimationFrame(0.1f, Rectf(spriteWidth * 4, spriteHeight * 1, spriteWidth, spriteHeight)),
+		}))},
+	{ "walk", new AnimatorState(new Animation(std::vector<AnimationFrame*>{
+			new AnimationFrame(0.25f, Rectf(spriteWidth * 5, spriteHeight * 1, spriteWidth, spriteHeight)),
+			new AnimationFrame(0.25f, Rectf(spriteWidth * 6, spriteHeight * 1, spriteWidth, spriteHeight)),
+		}))},
+	{ "death", new AnimatorState(new Animation(std::vector<AnimationFrame*>{
+			new AnimationFrame(0.1f, Rectf(spriteWidth * 7, spriteHeight * 1, spriteWidth, spriteHeight)),
+			new AnimationFrame(0.1f, Rectf(spriteWidth * 8, spriteHeight * 1, spriteWidth, spriteHeight)),
+			new AnimationFrame(0.1f, Rectf(spriteWidth * 9, spriteHeight * 1, spriteWidth, spriteHeight)),
+		}))},
+	};
+
+	const std::list<AnimatorTransition*> enemyTransitions
+	{
+		new AnimatorAnimationEndTransition("spawn", "walk"),
+		new ConditionalAnimatorTransition("walk", "death", "isDead", true),
+	};
+
+	pEnemy->AddComponent(new AnimatorRenderer(
+		pEnemy,
+		pTexture,
+		enemyStates,
+		enemyTransitions,
+		"spawn"
+	));
+
+	// LOGIC
+	pEnemy->AddComponent(new Collider(pEnemy, std::vector<Vector2f>{
+		Vector2f(-spriteWidth / 2, -spriteHeight / 2),
+			Vector2f(-spriteWidth / 2, spriteHeight / 2),
+			Vector2f(spriteWidth / 2, spriteHeight / 2),
+			Vector2f(spriteWidth / 2, -spriteHeight / 2),
+	}));
+
+	pEnemy->AddComponent(new PhysicsBody(pEnemy));
+
+	pEnemy->AddComponent(new Zombie(pEnemy, pScene));
+
+	pEnemy->Initialize();
+
+	return pEnemy->GetComponent<Zombie>();
 }

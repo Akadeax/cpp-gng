@@ -13,8 +13,7 @@ Texture* TextureCache::LoadTexture(const std::string& name, const std::string& r
 {
 	if (m_Textures.count(name) == 1)
 	{
-		std::cerr << "A texture of name '" << name << "' is already in cache";
-		return nullptr;
+		return GetTexture(name);
 	}
 
 	Texture* tex{ new Texture(resourceLocation) };

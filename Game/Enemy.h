@@ -1,11 +1,17 @@
 #pragma once
 #include "Component.h"
 
+enum class EnemyType
+{
+	zombie
+};
+
 class Enemy : public Component
 {
 public:
+	explicit Enemy(Entity* pParent);
 
-private:
-
+	virtual void ResetEnemy() = 0;
+	virtual void Damage() = 0;
 };
 

@@ -4,7 +4,6 @@
 #include "Vector2f.h"
 
 class SpawnerKeeper;
-class Zombie;
 class ProjectilePool;
 class Transform;
 class Entity;
@@ -29,15 +28,13 @@ private:
 
 	Entity* m_pPlayer{};
 
-	Zombie* m_pEnemy{};
-
 	Vector2f m_LevelSize{};
 	Transform* m_pBackgroundTransform{};
 
 	void CreatePlayer();
-	void CreateEnemy();
 	void CreateLevel();
 
 	void CreateLadder(float xCoord) const;
+	void CreateZombieSpawner(Vector2f pos) const;
 };
 

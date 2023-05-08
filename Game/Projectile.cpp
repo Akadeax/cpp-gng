@@ -3,11 +3,11 @@
 
 #include <cassert>
 
+#include "Enemy.h"
 #include "Entity.h"
 #include "PlayerController.h"
 #include "Renderer.h"
 #include "Transform.h"
-#include "Zombie.h"
 
 Projectile::Projectile(Entity* pParent)
 	: Collider(pParent, std::vector<Vector2f>(4), true)
@@ -65,7 +65,8 @@ void Projectile::OnCollisionEnter(Collider* other, float deltaTime)
 	}
 	else if (m_Type == Type::player && other->CompareTag("Enemy"))
 	{
-		Zombie* pEnemy{ other->GetParent()->GetComponent<Zombie>() };
+		Enemy* pEnemy{ other->GetParent()->GetComponent<Enemy>() };
+		// TODO: Damage func
 		pEnemy->Damage();
 
 		m_pParent->SetActive(false);

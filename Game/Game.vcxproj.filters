@@ -63,7 +63,7 @@
       <Filter>Source\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="EnemySpawner.cpp">
-      <Filter>Source</Filter>
+      <Filter>Source\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -106,8 +106,11 @@
     <ClInclude Include="Enemy.h">
       <Filter>Source\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyPool.h">
+      <Filter>Source\Enemy</Filter>
+    </ClInclude>
     <ClInclude Include="EnemySpawner.h">
-      <Filter>Source</Filter>
+      <Filter>Source\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -28,6 +28,7 @@ public:
 
 	Game* GetGame() const;
 
+	Camera* GetCamera() const;
 	EntityKeeper* GetEntityKeeper() const;
 	PhysicsHandler* GetPhysicsHandler() const;
 	TextureCache* GetTextureCache() const;
