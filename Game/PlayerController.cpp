@@ -107,6 +107,11 @@ void PlayerController::Damage(Vector2f from)
 	m_IsGrounded = false;
 	m_pTransform->MovePosition(Vector2f(0, 1));
 	m_pPhysicsBody->SetVelocity(Vector2f(m_DamagedHorizontalVelocity * directionMultiplier, m_DamagedVerticalVelocity));
+
+	m_IsClimbing = false;
+	m_pCollider->SetTrigger(false);
+	m_pAnimator->SetParameter("isClimbing", false);
+	m_pAnimator->SetPaused(false);
 }
 
 void PlayerController::UpdateGroundMovement()
@@ -246,14 +251,24 @@ void PlayerController::UpdateShooting(float deltaTime)
 
 		const ProjectilePool* pool{ dynamic_cast<LevelScene*>(m_pParent->GetScene())->GetProjectilePool() };
 
+		Vector2f projectilePos{ m_pTransform->GetPosition() };
+		if (m_IsCrouched)
+		{
+			projectilePos.y += m_ShootProjectileOffsetCrouched;
+		}
+		else
+		{
+			projectilePos.y += m_ShootProjectileOffset;
+		}
+
 		pool->FireProjectile(Projectile::FireData{
 			Projectile::Type::player,
-			m_pTransform->GetPosition(),
+			projectilePos,
 			Vector2f(m_ShootingSpeed * static_cast<float>(m_LookDir), 0),
 			0,
 			20.f,
 			5.f
-			});
+		});
 	}
 
 	m_pAnimator->SetParameter("isShooting", m_IsShooting);

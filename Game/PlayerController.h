@@ -56,6 +56,8 @@ private:
 
 	bool m_IsShooting{ false };
 	const float m_ShootingSpeed{ 150.f };
+	const float m_ShootProjectileOffset{ 2.f };
+	const float m_ShootProjectileOffsetCrouched{ -3.f };
 
 	const float m_ClimbSpeed{ 50.f };
 	bool m_IsClimbing{ false };

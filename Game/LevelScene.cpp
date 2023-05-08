@@ -46,7 +46,6 @@ void LevelScene::InitializeScene()
 	const int spawnerAmount{ 20 };
 	const float spawnerIntervalDist{ 60.f };
 	const float spawnerHeight{ 55.f };
-
 	for(int i{}; i < spawnerAmount; ++i)
 	{
 		CreateZombieSpawner(Vector2f(spawnerDistFromBorder + spawnerIntervalDist * static_cast<float>(i), spawnerHeight));
@@ -236,7 +235,7 @@ void LevelScene::CreateLevel()
 
 	CreateLadder(727);
 	CreateLadder(919);
-	CreateLadder(1075);
+	CreateLadder(1078);
 }
 
 void LevelScene::CreateLadder(float xCoord) const

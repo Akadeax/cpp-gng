@@ -159,7 +159,7 @@ Zombie* Zombie::CreateZombie(LevelScene* pScene)
 			Vector2f(-spriteWidth / 2, spriteHeight / 2),
 			Vector2f(spriteWidth / 2, spriteHeight / 2),
 			Vector2f(spriteWidth / 2, -spriteHeight / 2),
-	}));
+	}, true));
 
 	pEnemy->AddComponent(new PhysicsBody(pEnemy));
 
