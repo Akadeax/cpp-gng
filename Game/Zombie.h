@@ -1,5 +1,6 @@
 #pragma once
 #include "Enemy.h"
+#include "EnemyPool.h"
 
 class TextureCache;
 class Collider;
@@ -12,14 +13,14 @@ class Texture;
 class Zombie final : public Enemy
 {
 public:
-	explicit Zombie(Entity* pParent, LevelScene* pLevelScene);
+	explicit Zombie(Entity* pParent, LevelScene* pLevelScene, EnemyPool<Zombie>* returnTo);
 	void Initialize() override;
 	void Update(float deltaTime) override;
 
 
 	void ResetEnemy() override;
 
-	static Zombie* CreateZombie(LevelScene* pScene);
+	static Zombie* CreateZombie(LevelScene* pScene, EnemyPool<Zombie>* returnTo);
 	void Damage() override;
 
 private:
@@ -33,6 +34,8 @@ private:
 
 	Transform* m_pPlayer{ nullptr };
 
+	EnemyPool<Zombie>* m_ReturnTo;
+
 	const float m_WalkSpeed{ 30.f };
 
 	bool m_IsDead{ false };
@@ -43,4 +46,3 @@ private:
 	const float m_SpawnTime{ 0.5f };
 	float m_CurrentSpawnTime{};
 };
-

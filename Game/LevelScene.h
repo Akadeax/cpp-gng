@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "Vector2f.h"
 
+enum class EnemyType;
 class SpawnerKeeper;
 class ProjectilePool;
 class Transform;
@@ -36,5 +37,6 @@ private:
 
 	void CreateLadder(float xCoord) const;
 	void CreateZombieSpawner(Vector2f pos) const;
+	void CreateSetSpawner(Vector2f pos, EnemyType type) const;
 };
 

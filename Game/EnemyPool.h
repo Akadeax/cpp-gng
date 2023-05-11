@@ -14,6 +14,8 @@ public:
 	T* GetPooledObject();
 	void ReturnObject(T* object);
 
+	std::vector<T*> GetObjects() const;
+
 private:
 	std::vector<T*> m_Objects;
 };
@@ -36,4 +38,10 @@ template<typename T>
 void EnemyPool<T>::ReturnObject(T* object)
 {
 	m_Objects.push_back(object);
+}
+
+template <typename T>
+std::vector<T*> EnemyPool<T>::GetObjects() const
+{
+	return m_Objects;
 }

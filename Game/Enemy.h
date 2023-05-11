@@ -3,7 +3,12 @@
 
 enum class EnemyType
 {
-	zombie
+	zombie,
+	greenMonster,
+	crow,
+	petiteDevil,
+	woodyPig,
+	goblin
 };
 
 class Enemy : public Component

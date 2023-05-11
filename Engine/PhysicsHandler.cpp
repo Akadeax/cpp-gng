@@ -106,6 +106,8 @@ void PhysicsHandler::NotifyColliders(float deltaTime)
 {
 	for (PhysicsBody* physicsBody : m_PhysicsBodies)
 	{
+		if (!physicsBody->GetParent()->IsActive()) continue;
+
 		for (Collider* collider : m_Colliders)
 		{
 			if (!collider->GetParent()->IsActive() || !collider->IsEnabled()) continue;

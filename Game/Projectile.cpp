@@ -66,7 +66,6 @@ void Projectile::OnCollisionEnter(Collider* other, float deltaTime)
 	else if (m_Type == Type::player && other->CompareTag("Enemy"))
 	{
 		Enemy* pEnemy{ other->GetParent()->GetComponent<Enemy>() };
-		// TODO: Damage func
 		pEnemy->Damage();
 
 		m_pParent->SetActive(false);

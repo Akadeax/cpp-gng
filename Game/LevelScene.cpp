@@ -50,6 +50,8 @@ void LevelScene::InitializeScene()
 	{
 		CreateZombieSpawner(Vector2f(spawnerDistFromBorder + spawnerIntervalDist * static_cast<float>(i), spawnerHeight));
 	}
+
+	CreateSetSpawner(Vector2f(500, spawnerHeight), EnemyType::zombie);
 }
 
 
@@ -240,25 +242,32 @@ void LevelScene::CreateLevel()
 
 void LevelScene::CreateLadder(float xCoord) const
 {
-	Entity* pLadder1{ m_pEntityKeeper->CreateEntity(0, "Ladder") };
+	Entity* pLadder{ m_pEntityKeeper->CreateEntity(0, "Ladder") };
 
 	const float ladderWidth{ 15.f };
 	const float ladderHeight{ 104.f };
 
-	pLadder1->AddComponent(new Transform(pLadder1, Vector2f(xCoord, 92)));
-	pLadder1->AddComponent(new LadderCollider(pLadder1, std::vector<Vector2f>{
+	pLadder->AddComponent(new Transform(pLadder, Vector2f(xCoord, 92)));
+	pLadder->AddComponent(new LadderCollider(pLadder, std::vector<Vector2f>{
 		Vector2f(-ladderWidth / 2, -ladderHeight / 2),
 			Vector2f(-ladderWidth / 2, ladderHeight / 2),
 			Vector2f(ladderWidth / 2, ladderHeight / 2),
 			Vector2f(ladderWidth / 2, -ladderHeight / 2),
 	}));
 
-	pLadder1->Initialize();
+	pLadder->Initialize();
 }
 
 void LevelScene::CreateZombieSpawner(Vector2f pos) const
 {
-	Entity* pSpawner1{ GetEntityKeeper()->CreateEntity() };
-	pSpawner1->AddComponent(new Transform(pSpawner1, pos));
-	pSpawner1->AddComponent(new EnemySpawner(pSpawner1, this, SpawnerType::random, EnemyType::zombie));
+	Entity* pSpawner{ GetEntityKeeper()->CreateEntity() };
+	pSpawner->AddComponent(new Transform(pSpawner, pos));
+	pSpawner->AddComponent(new EnemySpawner(pSpawner, this, SpawnerType::random, EnemyType::zombie));
+}
+
+void LevelScene::CreateSetSpawner(Vector2f pos, EnemyType type) const
+{
+	Entity* pSpawner{ GetEntityKeeper()->CreateEntity() };
+	pSpawner->AddComponent(new Transform(pSpawner, pos));
+	pSpawner->AddComponent(new EnemySpawner(pSpawner, this, SpawnerType::set, type));
 }

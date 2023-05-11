@@ -18,9 +18,10 @@
 #include "TextureCache.h"
 
 
-Zombie::Zombie(Entity* pParent, LevelScene* pLevelScene)
+Zombie::Zombie(Entity* pParent, LevelScene* pLevelScene, EnemyPool<Zombie>* returnTo)
 	: Enemy(pParent)
 	, m_pLevelScene{ pLevelScene }
+	, m_ReturnTo{ returnTo }
 {
 }
 
@@ -78,6 +79,7 @@ void Zombie::Update(float deltaTime)
 		else
 		{
 			GetParent()->SetActive(false);
+			m_ReturnTo->ReturnObject(this);
 		}
 	}
 }
@@ -108,7 +110,7 @@ void Zombie::ResetEnemy()
 	m_CurrentSpawnTime = m_SpawnTime;
 }
 
-Zombie* Zombie::CreateZombie(LevelScene* pScene)
+Zombie* Zombie::CreateZombie(LevelScene* pScene, EnemyPool<Zombie>* returnTo)
 {
 	Texture* pTexture{ pScene->GetTextureCache()->LoadTexture("zombie", "zombie.png") };
 	Entity* pEnemy{ pScene->GetEntityKeeper()->CreateEntity(5, "Enemy") };
@@ -131,6 +133,13 @@ Zombie* Zombie::CreateZombie(LevelScene* pScene)
 	{ "walk", new AnimatorState(new Animation(std::vector<AnimationFrame*>{
 			new AnimationFrame(0.25f, Rectf(spriteWidth * 5, spriteHeight * 1, spriteWidth, spriteHeight)),
 			new AnimationFrame(0.25f, Rectf(spriteWidth * 6, spriteHeight * 1, spriteWidth, spriteHeight)),
+		}))},
+	{ "despawn", new AnimatorState(new Animation(std::vector<AnimationFrame*>{
+			new AnimationFrame(0.1f, Rectf(spriteWidth * 4, spriteHeight * 1, spriteWidth, spriteHeight)),
+			new AnimationFrame(0.1f, Rectf(spriteWidth * 3, spriteHeight * 1, spriteWidth, spriteHeight)),
+			new AnimationFrame(0.1f, Rectf(spriteWidth * 2, spriteHeight * 1, spriteWidth, spriteHeight)),
+			new AnimationFrame(0.1f, Rectf(spriteWidth * 1, spriteHeight * 1, spriteWidth, spriteHeight)),
+			new AnimationFrame(0.1f, Rectf(spriteWidth * 0, spriteHeight * 1, spriteWidth, spriteHeight)),
 		}))},
 	{ "death", new AnimatorState(new Animation(std::vector<AnimationFrame*>{
 			new AnimationFrame(0.1f, Rectf(spriteWidth * 7, spriteHeight * 1, spriteWidth, spriteHeight)),
@@ -163,9 +172,11 @@ Zombie* Zombie::CreateZombie(LevelScene* pScene)
 
 	pEnemy->AddComponent(new PhysicsBody(pEnemy));
 
-	pEnemy->AddComponent(new Zombie(pEnemy, pScene));
+	pEnemy->AddComponent(new Zombie(pEnemy, pScene, returnTo));
 
 	pEnemy->Initialize();
+
+	pEnemy->SetActive(false);
 
 	return pEnemy->GetComponent<Zombie>();
 }

@@ -19,8 +19,13 @@ public:
 	Vector2f GetPosition() const;
 	EnemyType GetEnemyType() const;
 
+	bool HasSpawned() const { return m_HasSpawned; }
+	void SetHasSpawned(bool newVal) { m_HasSpawned = newVal; }
+
 private:
 	SpawnerType m_SpawnerType;
 	EnemyType m_EnemyType;
+
+	bool m_HasSpawned{ false };
 };
 

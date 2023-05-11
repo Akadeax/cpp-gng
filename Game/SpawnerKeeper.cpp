@@ -12,63 +12,33 @@ SpawnerKeeper::SpawnerKeeper(LevelScene* pScene)
 	: m_pScene{ pScene }
 	, m_pPlayer{ pScene->GetPlayer()->GetComponent<Transform>() }
 {
-	m_ZombiePool = EnemyPool<Zombie>();
-	for (int i{ 0 }; i < 10; ++i)
+	m_pZombiePool = new EnemyPool<Zombie>();
+	for (int i{ 0 }; i < 100; ++i)
 	{
-		//m_ZombiePool.ReturnObject(Zombie::CreateZombie(pScene));
+		m_pZombiePool->ReturnObject(Zombie::CreateZombie(pScene, m_pZombiePool));
 	}
+}
+
+SpawnerKeeper::~SpawnerKeeper()
+{
+	delete m_pZombiePool;
 }
 
 void SpawnerKeeper::Update(float deltaTime)
 {
-	if (m_CurrentEnemySpawnTimer > 0.f)
-	{
-		m_CurrentEnemySpawnTimer -= deltaTime;
-		return;
-	}
-
-	m_CurrentEnemySpawnTimer = utils::RandomInRange(m_EnemySpawnTimerRange.x, m_EnemySpawnTimerRange.y);
-
-	std::vector<EnemySpawner*> spawnersInRange{};
-	for (EnemySpawner* spawner : m_RandomEnemySpawners)
-	{
-		const Vector2f spawnerPos{ spawner->GetParent()->GetComponent<Transform>()->GetPosition() };
-		const float dist{ spawnerPos.GetDistance(m_pPlayer->GetPosition()) };
-		if (dist > m_MinSpawnRange && dist < m_MaxSpawnRange)
-		{
-			spawnersInRange.push_back(spawner);
-		}
-	}
-
-	if (spawnersInRange.empty()) return;
-
-	const int rndIndex{ utils::RandomInRange(0, static_cast<int>(spawnersInRange.size()) - 1) };
-	const EnemySpawner* spawner{ spawnersInRange[rndIndex] };
-	const Vector2f pos{ spawner->GetPosition() };
-
-	Enemy* enemy{};
-	switch (spawner->GetEnemyType())
-	{
-	case EnemyType::zombie:
-		// TODO: Pool
-		//enemy = m_ZombiePool.GetPooledObject();
-		enemy = Zombie::CreateZombie(m_pScene);
-		break;
-	}
-
-	enemy->ResetEnemy();
-	enemy->GetParent()->GetComponent<Transform>()->SetPosition(pos);
+	UpdateRandomSpawners(deltaTime);
+	UpdateSetSpawners();
 }
 
 void SpawnerKeeper::DrawDebugRadius() const
 {
 	glPushMatrix();
 
-	// Draw spawn range gizmos
+	// Draw random spawn range gizmos
 	glTranslatef(m_pPlayer->GetPosition().x, m_pPlayer->GetPosition().y, 0);
 	utils::SetColor(Color4f(0, 0, 1, 1));
-	utils::DrawEllipse(0, 0, m_MinSpawnRange, m_MinSpawnRange, 2);
-	utils::DrawEllipse(0, 0, m_MaxSpawnRange, m_MaxSpawnRange, 2);
+	utils::DrawEllipse(0, 0, m_RandomMinSpawnRange, m_RandomMinSpawnRange, 2);
+	utils::DrawEllipse(0, 0, m_RandomMaxSpawnRange, m_RandomMaxSpawnRange, 2);
 
 	glPopMatrix();
 
@@ -122,4 +92,77 @@ void SpawnerKeeper::RemoveSpawner(const EnemySpawner* self, SpawnerType type)
 		m_SetEnemySpawners.erase(std::find(m_SetEnemySpawners.begin(), m_SetEnemySpawners.end(), self));
 		break;
 	}
+}
+
+void SpawnerKeeper::UpdateRandomSpawners(float deltaTime)
+{
+	if (m_CurrentRandomEnemySpawnTimer > 0.f)
+	{
+		m_CurrentRandomEnemySpawnTimer -= deltaTime;
+		return;
+	}
+
+	m_CurrentRandomEnemySpawnTimer = utils::RandomInRange(m_RandomEnemySpawnTimerRange.x, m_RandomEnemySpawnTimerRange.y);
+
+	std::vector<EnemySpawner*> spawnersInRange{};
+	for (EnemySpawner* spawner : m_RandomEnemySpawners)
+	{
+		const Vector2f spawnerPos{ spawner->GetParent()->GetComponent<Transform>()->GetPosition() };
+		const float dist{ spawnerPos.GetDistance(m_pPlayer->GetPosition()) };
+		if (dist > m_RandomMinSpawnRange && dist < m_RandomMaxSpawnRange)
+		{
+			spawnersInRange.push_back(spawner);
+		}
+	}
+
+	if (spawnersInRange.empty()) return;
+
+	const int rndIndex{ utils::RandomInRange(0, static_cast<int>(spawnersInRange.size()) - 1) };
+	const EnemySpawner* spawner{ spawnersInRange[rndIndex] };
+
+	const Enemy* pEnemy{ GetPooledEnemy(spawner->GetEnemyType()) };
+	if (pEnemy == nullptr)
+	{
+		std::cout << "Enemy pool ran out" << std::endl;
+		return;
+	}
+	pEnemy->GetParent()->GetComponent<Transform>()->SetPosition(spawner->GetPosition());
+}
+
+void SpawnerKeeper::UpdateSetSpawners()
+{
+	for (EnemySpawner* spawner : m_SetEnemySpawners)
+	{
+		if (spawner->HasSpawned()) continue;
+
+		const float playerDist{ spawner->GetPosition().GetDistance(m_pPlayer->GetPosition()) };
+		if (playerDist > m_SetSpawnerRange) continue;
+
+		const Enemy* pEnemy{ GetPooledEnemy(spawner->GetEnemyType()) };
+		if (pEnemy == nullptr)
+		{
+			std::cout << "Enemy pool ran out" << std::endl;
+			return;
+		}
+		pEnemy->GetParent()->GetComponent<Transform>()->SetPosition(spawner->GetPosition());
+
+		spawner->SetHasSpawned(true);
+	}
+}
+
+Enemy* SpawnerKeeper::GetPooledEnemy(EnemyType type)
+{
+	Enemy* pEnemy{};
+	switch (type)
+	{
+	case EnemyType::zombie:
+		pEnemy = m_pZombiePool->GetPooledObject();
+	}
+
+	if (pEnemy == nullptr) return nullptr;
+
+	pEnemy->GetParent()->SetActive(true);
+	pEnemy->ResetEnemy();
+
+	return pEnemy;
 }

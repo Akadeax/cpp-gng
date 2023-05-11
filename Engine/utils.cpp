@@ -698,4 +698,11 @@ int utils::RandomInRange(int minInclusive, int maxInclusive)
 	return rand() % (maxInclusive - minInclusive + 1) + minInclusive;
 }
 
+float utils::RandomInRange(float minInclusive, float maxInclusive, int decimals)
+{
+	const float multi{ std::powf(10, static_cast<float>(decimals)) };
+	const float num{ static_cast<float>(RandomInRange(static_cast<int>(minInclusive * multi), static_cast<int>(maxInclusive * multi))) };
+	return num / multi;
+}
+
 #pragma endregion CollisionFunctionality
