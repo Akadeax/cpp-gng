@@ -2,48 +2,44 @@
 #include "Enemy.h"
 #include "EnemyPool.h"
 
-class TextureCache;
 class Collider;
-class AnimatorRenderer;
-class PhysicsBody;
 class Transform;
+class AnimatorRenderer;
 class LevelScene;
-class Texture;
 
-class Zombie final : public Enemy
+class GreenMonster final : public Enemy
 {
 public:
-	explicit Zombie(Entity* pParent, LevelScene* pLevelScene, EnemyPool<Zombie>* returnTo);
+	explicit GreenMonster(Entity* pParent, LevelScene* pLevelScene, EnemyPool<GreenMonster>* returnTo);
+
 	void Initialize() override;
 	void Update(float deltaTime) override;
 
 
 	void ResetEnemy() override;
 
-	static Zombie* Create(LevelScene* pScene, EnemyPool<Zombie>* returnTo);
+	static GreenMonster* Create(LevelScene* pScene, EnemyPool<GreenMonster>* returnTo);
 	void Damage() override;
 
 private:
-
 	LevelScene* m_pLevelScene;
 
 	Transform* m_pTransform{ nullptr };
 	Collider* m_pCollider{ nullptr };
-	PhysicsBody* m_pPhysicsBody{ nullptr };
 	AnimatorRenderer* m_pAnimator{ nullptr };
 
 	Transform* m_pPlayer{ nullptr };
 
-	EnemyPool<Zombie>* m_ReturnTo;
+	EnemyPool<GreenMonster>* m_ReturnTo;
 
-	int m_WalkingDirMultiplier{ 0 };
-	const float m_WalkSpeed{ 30.f };
+	const float m_ShootTime{ 3.f };
+	float m_CurrentShootTime{};
+	void Shoot() const;
+
+	const float m_ProjectileVelocity{ 60.f };
 
 	bool m_IsDead{ false };
 	const float m_DeathTime{ 0.3f };
 	float m_CurrentDeathTime{};
-
-	bool m_Spawned{ false };
-	const float m_SpawnTime{ 0.5f };
-	float m_CurrentSpawnTime{};
 };
+

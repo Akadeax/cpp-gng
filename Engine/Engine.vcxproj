@@ -21,7 +21,7 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AnimationFrame.cpp" />
-    <ClCompile Include="AnimatorAnimationEndTransition.cpp" />
+    <ClCompile Include="AnimationEndAnimatorTransition.cpp" />
     <ClCompile Include="AnimatorRenderer.cpp" />
     <ClCompile Include="AnimatorState.cpp" />
     <ClCompile Include="AnimatorTransition.cpp" />
@@ -59,7 +59,7 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AnimationFrame.h" />
-    <ClInclude Include="AnimatorAnimationEndTransition.h" />
+    <ClInclude Include="AnimationEndAnimatorTransition.h" />
     <ClInclude Include="AnimatorRenderer.h" />
     <ClInclude Include="AnimatorState.h" />
     <ClInclude Include="AnimatorTransition.h" />

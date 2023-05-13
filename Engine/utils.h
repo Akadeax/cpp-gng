@@ -86,4 +86,6 @@ namespace utils
 
 	int RandomInRange(int minInclusive, int maxInclusive);
 	float RandomInRange(float minInclusive, float maxInclusive, int decimals = 2);
+
+	int Sign(float num);
 }

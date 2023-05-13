@@ -88,7 +88,7 @@
     <ClCompile Include="ConditionalAnimatorTransition.cpp">
       <Filter>Animation\Transition</Filter>
     </ClCompile>
-    <ClCompile Include="AnimatorAnimationEndTransition.cpp">
+    <ClCompile Include="AnimationEndAnimatorTransition.cpp">
       <Filter>Animation\Transition</Filter>
     </ClCompile>
     <ClCompile Include="PartialRenderer.cpp">
@@ -183,7 +183,7 @@
     <ClInclude Include="ConditionalAnimatorTransition.h">
       <Filter>Animation\Transition</Filter>
     </ClInclude>
-    <ClInclude Include="AnimatorAnimationEndTransition.h">
+    <ClInclude Include="AnimationEndAnimatorTransition.h">
       <Filter>Animation\Transition</Filter>
     </ClInclude>
     <ClInclude Include="PartialRenderer.h">

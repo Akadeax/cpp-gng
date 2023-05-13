@@ -87,15 +87,13 @@ float Vector2f::AngleWith(const Vector2f& other) const
 
 Vector2f Vector2f::Normalized(float epsilon) const
 {
-	float length{ Length( ) };
+	const float length{ Length( ) };
 	if ( length < epsilon )
 	{
 		return Vector2f{ 0, 0 };
 	}
-	else
-	{
-		return Vector2f{ x / length, y / length };
-	}
+
+	return Vector2f{ x / length, y / length };
 }
 
 Vector2f Vector2f::Orthogonal() const

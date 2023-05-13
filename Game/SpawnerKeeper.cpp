@@ -1,9 +1,11 @@
 #include "pch.h"
 #include "SpawnerKeeper.h"
 
+#include "Collider.h"
 #include "Enemy.h"
 #include "EnemySpawner.h"
 #include "Entity.h"
+#include "GreenMonster.h"
 #include "LevelScene.h"
 #include "Transform.h"
 #include "utils.h"
@@ -12,10 +14,18 @@ SpawnerKeeper::SpawnerKeeper(LevelScene* pScene)
 	: m_pScene{ pScene }
 	, m_pPlayer{ pScene->GetPlayer()->GetComponent<Transform>() }
 {
+	const int poolAmount{ 10 };
+
 	m_pZombiePool = new EnemyPool<Zombie>();
-	for (int i{ 0 }; i < 100; ++i)
+	for (int i{ 0 }; i < poolAmount; ++i)
 	{
-		m_pZombiePool->ReturnObject(Zombie::CreateZombie(pScene, m_pZombiePool));
+		m_pZombiePool->ReturnObject(Zombie::Create(pScene, m_pZombiePool));
+	}
+
+	m_pGreenMonsterPool = new EnemyPool<GreenMonster>();
+	for (int i{ 0 }; i < poolAmount; ++i)
+	{
+		m_pGreenMonsterPool->ReturnObject(GreenMonster::Create(pScene, m_pGreenMonsterPool));
 	}
 }
 
@@ -39,6 +49,9 @@ void SpawnerKeeper::DrawDebugRadius() const
 	utils::SetColor(Color4f(0, 0, 1, 1));
 	utils::DrawEllipse(0, 0, m_RandomMinSpawnRange, m_RandomMinSpawnRange, 2);
 	utils::DrawEllipse(0, 0, m_RandomMaxSpawnRange, m_RandomMaxSpawnRange, 2);
+
+	utils::SetColor(Color4f(1, 0, 0, 1));
+	utils::DrawEllipse(0, 0, m_SetSpawnerRange, m_SetSpawnerRange, 2);
 
 	glPopMatrix();
 
@@ -120,16 +133,23 @@ void SpawnerKeeper::UpdateRandomSpawners(float deltaTime)
 	const int rndIndex{ utils::RandomInRange(0, static_cast<int>(spawnersInRange.size()) - 1) };
 	const EnemySpawner* spawner{ spawnersInRange[rndIndex] };
 
-	const Enemy* pEnemy{ GetPooledEnemy(spawner->GetEnemyType()) };
+	Enemy* pEnemy{ GetPooledEnemy(spawner->GetEnemyType()) };
 	if (pEnemy == nullptr)
 	{
 		std::cout << "Enemy pool ran out" << std::endl;
 		return;
 	}
-	pEnemy->GetParent()->GetComponent<Transform>()->SetPosition(spawner->GetPosition());
+
+	// Set position outside of ground
+	const Collider* pEnemyColl{ pEnemy->GetParent()->GetComponent<Collider>() };
+	const float halfHeight{ pEnemyColl->GetHeight() / 2.f };
+	const Vector2f pos{ Vector2f(spawner->GetPosition().x, spawner->GetPosition().y + halfHeight) };
+	pEnemy->GetParent()->GetComponent<Transform>()->SetPosition(pos);
+
+	pEnemy->ResetEnemy();
 }
 
-void SpawnerKeeper::UpdateSetSpawners()
+void SpawnerKeeper::UpdateSetSpawners() const
 {
 	for (EnemySpawner* spawner : m_SetEnemySpawners)
 	{
@@ -138,31 +158,43 @@ void SpawnerKeeper::UpdateSetSpawners()
 		const float playerDist{ spawner->GetPosition().GetDistance(m_pPlayer->GetPosition()) };
 		if (playerDist > m_SetSpawnerRange) continue;
 
-		const Enemy* pEnemy{ GetPooledEnemy(spawner->GetEnemyType()) };
+		Enemy* pEnemy{ GetPooledEnemy(spawner->GetEnemyType()) };
 		if (pEnemy == nullptr)
 		{
 			std::cout << "Enemy pool ran out" << std::endl;
 			return;
 		}
-		pEnemy->GetParent()->GetComponent<Transform>()->SetPosition(spawner->GetPosition());
+
+		// Set position outside of ground
+		const Collider* pEnemyColl{ pEnemy->GetParent()->GetComponent<Collider>() };
+		const float halfHeight{ pEnemyColl->GetHeight() / 2.f };
+		const Vector2f pos{ Vector2f(spawner->GetPosition().x, spawner->GetPosition().y + halfHeight) };
+		pEnemy->GetParent()->GetComponent<Transform>()->SetPosition(pos);
+
+		pEnemy->ResetEnemy();
 
 		spawner->SetHasSpawned(true);
 	}
 }
 
-Enemy* SpawnerKeeper::GetPooledEnemy(EnemyType type)
+Enemy* SpawnerKeeper::GetPooledEnemy(EnemyType type) const
 {
-	Enemy* pEnemy{};
+	Enemy* pEnemy;
 	switch (type)
 	{
 	case EnemyType::zombie:
 		pEnemy = m_pZombiePool->GetPooledObject();
+		break;
+	case EnemyType::greenMonster:
+		pEnemy = m_pGreenMonsterPool->GetPooledObject();
+		break;
+	default:
+		pEnemy = nullptr;
 	}
 
 	if (pEnemy == nullptr) return nullptr;
 
 	pEnemy->GetParent()->SetActive(true);
-	pEnemy->ResetEnemy();
 
 	return pEnemy;
 }

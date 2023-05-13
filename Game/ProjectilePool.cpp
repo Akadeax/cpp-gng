@@ -13,9 +13,9 @@ ProjectilePool::ProjectilePool(const LevelScene* pLevelScene)
 {
 	EntityKeeper* pEntityKeeper{ pLevelScene->GetEntityKeeper() };
 
-	const int projectilePoolAmount{ 10 };
+	const int projectilePoolAmount{ 40 };
 
-	Texture* pProjectilesTexture{ pLevelScene->GetTextureCache()->LoadTexture("projectiles", "projectiles.png")};
+	Texture* pProjectilesTexture{ pLevelScene->GetTextureCache()->LoadTexture("projectiles", "projectiles_24x13.png")};
 	m_Projectiles = std::vector<Projectile*>(projectilePoolAmount);
 
 	for (size_t i{ 0 }; i < projectilePoolAmount; ++i)
@@ -26,7 +26,7 @@ ProjectilePool::ProjectilePool(const LevelScene* pLevelScene)
 		Projectile* pProjectile{ new Projectile(pEntity) };
 		pEntity->AddComponent(pProjectile);
 
-		pEntity->AddComponent(new PartialRenderer(pEntity, pProjectilesTexture, 3, 1, false));
+		pEntity->AddComponent(new PartialRenderer(pEntity, pProjectilesTexture, 3, 0, false));
 
 		pEntity->SetActive(false);
 		pEntity->Initialize();

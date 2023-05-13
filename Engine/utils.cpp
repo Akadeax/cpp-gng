@@ -705,4 +705,11 @@ float utils::RandomInRange(float minInclusive, float maxInclusive, int decimals)
 	return num / multi;
 }
 
+int utils::Sign(float num)
+{
+	if (num > 0) return 1;
+	if (num < 0) return -1;
+	return 0;
+}
+
 #pragma endregion CollisionFunctionality

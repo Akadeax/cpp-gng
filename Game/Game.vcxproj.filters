@@ -21,6 +21,9 @@
     <Filter Include="Source\Enemy">
       <UniqueIdentifier>{dd629c2e-fd4c-4074-a5b7-071c7048af4b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Enemy\Enemies">
+      <UniqueIdentifier>{9354dfa1-ef47-4f8e-bf08-e637066411f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GhostsAndGoblins.cpp">
@@ -53,9 +56,6 @@
     <ClCompile Include="Projectile.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Zombie.cpp">
-      <Filter>Source\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="SpawnerKeeper.cpp">
       <Filter>Source\Enemy</Filter>
     </ClCompile>
@@ -64,6 +64,12 @@
     </ClCompile>
     <ClCompile Include="EnemySpawner.cpp">
       <Filter>Source\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Zombie.cpp">
+      <Filter>Source\Enemy\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="GreenMonster.cpp">
+      <Filter>Source\Enemy\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -97,9 +103,6 @@
     <ClInclude Include="Projectile.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Zombie.h">
-      <Filter>Source\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="SpawnerKeeper.h">
       <Filter>Source\Enemy</Filter>
     </ClInclude>
@@ -111,6 +114,12 @@
     </ClInclude>
     <ClInclude Include="EnemySpawner.h">
       <Filter>Source\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Zombie.h">
+      <Filter>Source\Enemy\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="GreenMonster.h">
+      <Filter>Source\Enemy\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

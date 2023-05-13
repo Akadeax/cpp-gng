@@ -1,7 +1,7 @@
 #pragma once
 #include "Collider.h"
 
-class Renderer;
+class PartialRenderer;
 
 class Projectile final : public Collider
 {
@@ -30,11 +30,11 @@ public:
 	void OnCollisionEnter(Collider* other, float deltaTime) override;
 
 private:
-	Renderer* m_pRenderer{ nullptr };
+	PartialRenderer* m_pRenderer{ nullptr };
 
 	Type m_Type;
 	Vector2f m_Velocity{};
 
-	const float m_MaxLifetime{ 3.f };
+	const float m_MaxLifetime{ 10.f };
 	float m_Lifetime{};
 };

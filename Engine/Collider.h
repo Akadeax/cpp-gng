@@ -34,6 +34,8 @@ public:
 
 	void SetEnabled(bool value);
 	bool IsEnabled() const;
+
+	float GetHeight() const;
 protected:
 	Transform* m_pTransform{ nullptr };
 

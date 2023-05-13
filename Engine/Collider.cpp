@@ -132,3 +132,20 @@ bool Collider::IsEnabled() const
 {
 	return m_IsEnabled;
 }
+
+float Collider::GetHeight() const
+{
+	if (m_BaseVertices.size() <= 1) return 0.f;
+
+	float min{ FLT_MAX };
+	float max{ FLT_MIN };
+
+	for(size_t i{}; i < m_BaseVertices.size(); ++i)
+	{
+		const float currentHeight{ m_BaseVertices[i].y };
+		if (currentHeight < min) min = currentHeight;
+		if (currentHeight > max) max = currentHeight;
+	}
+
+	return max - min;
+}

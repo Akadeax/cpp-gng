@@ -5,7 +5,7 @@
 
 #include "Animation.h"
 #include "AnimationFrame.h"
-#include "AnimatorAnimationEndTransition.h"
+#include "AnimationEndAnimatorTransition.h"
 #include "AnimatorRenderer.h"
 #include "AnimatorState.h"
 #include "Entity.h"
@@ -16,6 +16,7 @@
 #include "ConditionalAnimatorTransition.h"
 #include "EntityKeeper.h"
 #include "TextureCache.h"
+#include "utils.h"
 
 
 Zombie::Zombie(Entity* pParent, LevelScene* pLevelScene, EnemyPool<Zombie>* returnTo)
@@ -37,27 +38,20 @@ void Zombie::Initialize()
 	assert(m_pPhysicsBody != nullptr && "Entity has Zombie component but no PhysicsBody component");
 	m_pAnimator = m_pParent->GetComponent<AnimatorRenderer>();
 	assert(m_pAnimator != nullptr && "Entity has Zombie component but no AnimatorRenderer component");
+
 }
 
 void Zombie::Update(float deltaTime)
 {
 	if (m_Spawned && !m_IsDead)
 	{
-		m_pAnimator->SetFlipX(m_pPhysicsBody->GetVelocity().x < 0);
-
-		const bool isRightOfPlayer{ m_pTransform->GetPosition().x > m_pPlayer->GetPosition().x };
-		const float directionTowardsPlayer{ isRightOfPlayer ? -1.f : 1.f };
-
-		m_pPhysicsBody->SetXVelocity(directionTowardsPlayer * m_WalkSpeed);
+		m_pPhysicsBody->SetXVelocity(static_cast<float>(m_WalkingDirMultiplier) * m_WalkSpeed);
 		return;
 	}
 
 
 	if (!m_Spawned)
 	{
-		const bool isRightOfPlayer{ m_pTransform->GetPosition().x > m_pPlayer->GetPosition().x };
-		m_pAnimator->SetFlipX(isRightOfPlayer);
-
 		if (m_CurrentSpawnTime > 0.f)
 		{
 			m_CurrentSpawnTime -= deltaTime;
@@ -108,17 +102,22 @@ void Zombie::ResetEnemy()
 
 	m_pCollider->SetEnabled(false);
 	m_CurrentSpawnTime = m_SpawnTime;
+
+	// Set walking dir for rest of life
+	const float xDiff{ m_pTransform->GetPosition().x - m_pPlayer->GetPosition().x };
+	m_pAnimator->SetFlipX(xDiff > 0);
+	m_WalkingDirMultiplier = utils::Sign(xDiff) * -1;
 }
 
-Zombie* Zombie::CreateZombie(LevelScene* pScene, EnemyPool<Zombie>* returnTo)
+Zombie* Zombie::Create(LevelScene* pScene, EnemyPool<Zombie>* returnTo)
 {
-	Texture* pTexture{ pScene->GetTextureCache()->LoadTexture("zombie", "zombie.png") };
+	Texture* pTexture{ pScene->GetTextureCache()->LoadTexture("zombie", "zombie_22x30.png") };
 	Entity* pEnemy{ pScene->GetEntityKeeper()->CreateEntity(5, "Enemy") };
 
-	pEnemy->AddComponent(new Transform(pEnemy, Vector2f(150, 55)));
+	pEnemy->AddComponent(new Transform(pEnemy));
 
 	// RENDERING
-	const float spriteWidth{ 22.f };
+	const float spriteWidth { 22.f };
 	const float spriteHeight{ 30.f };
 
 	const std::unordered_map<std::string, AnimatorState*> enemyStates
@@ -150,7 +149,7 @@ Zombie* Zombie::CreateZombie(LevelScene* pScene, EnemyPool<Zombie>* returnTo)
 
 	const std::list<AnimatorTransition*> enemyTransitions
 	{
-		new AnimatorAnimationEndTransition("spawn", "walk"),
+		new AnimationEndAnimatorTransition("spawn", "walk"),
 		new ConditionalAnimatorTransition("walk", "death", "isDead", true),
 	};
 

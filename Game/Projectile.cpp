@@ -5,6 +5,7 @@
 
 #include "Enemy.h"
 #include "Entity.h"
+#include "PartialRenderer.h"
 #include "PlayerController.h"
 #include "Renderer.h"
 #include "Transform.h"
@@ -19,8 +20,8 @@ void Projectile::Initialize()
 {
 	Collider::Initialize();
 
-	m_pRenderer = m_pParent->GetComponent<Renderer>();
-	assert(m_pRenderer != nullptr && "Entity has Projectile component but no Transform component");
+	m_pRenderer = m_pParent->GetComponent<PartialRenderer>();
+	assert(m_pRenderer != nullptr && "Entity has Projectile component but no PartialRenderer component");
 }
 
 void Projectile::Update(float deltaTime)
@@ -51,6 +52,7 @@ void Projectile::SetFireData(const FireData& data)
 		Vector2f(data.width / 2, -data.height / 2),
 	};
 
+	m_pRenderer->SetIndex(data.spriteIndex);
 	m_pRenderer->SetFlipX(data.velocity.x < 0);
 }
 
@@ -59,6 +61,7 @@ void Projectile::OnCollisionEnter(Collider* other, float deltaTime)
 	if (m_Type == Type::enemy && other->CompareTag("Player"))
 	{
 		PlayerController* player{ other->GetParent()->GetComponent<PlayerController>() };
+		player->GetParent()->GetComponent<Transform>()->MovePosition(Vector2f(0, 1));
 		player->Damage(m_pTransform->GetPosition());
 
 		m_pParent->SetActive(false);

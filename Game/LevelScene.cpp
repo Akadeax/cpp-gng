@@ -3,7 +3,7 @@
 
 #include "Animation.h"
 #include "AnimationFrame.h"
-#include "AnimatorAnimationEndTransition.h"
+#include "AnimationEndAnimatorTransition.h"
 #include "AnimatorRenderer.h"
 #include "AnimatorState.h"
 #include "Camera.h"
@@ -29,7 +29,7 @@
 
 void LevelScene::InitializeScene()
 {
-	std::cout << "Controls:\nArrows keys: move\nJ: jump\nK: shoot";
+	std::cout << "Controls:\nArrows keys: move\nJ: jump\nK: shoot\n";
 
 	CreatePlayer();
 
@@ -45,13 +45,17 @@ void LevelScene::InitializeScene()
 	const float spawnerDistFromBorder{ 20.f };
 	const int spawnerAmount{ 20 };
 	const float spawnerIntervalDist{ 60.f };
-	const float spawnerHeight{ 55.f };
+	const float spawnerHeight{ 40.f };
 	for(int i{}; i < spawnerAmount; ++i)
 	{
 		CreateZombieSpawner(Vector2f(spawnerDistFromBorder + spawnerIntervalDist * static_cast<float>(i), spawnerHeight));
 	}
 
-	CreateSetSpawner(Vector2f(500, spawnerHeight), EnemyType::zombie);
+	CreateSetSpawner(Vector2f(360, spawnerHeight), EnemyType::zombie);
+	CreateSetSpawner(Vector2f(560, spawnerHeight), EnemyType::zombie);
+
+
+	CreateSetSpawner(Vector2f(800, 119), EnemyType::greenMonster);
 }
 
 
@@ -72,8 +76,10 @@ void LevelScene::UpdateScene(float deltaTime)
 
 void LevelScene::DrawScene() const
 {
+#ifdef _DEBUG
 	m_pPhysicsHandler->DrawDebugColliders();
 	m_pSpawnerKeeper->DrawDebugRadius();
+#endif
 }
 
 ProjectilePool* LevelScene::GetProjectilePool() const
@@ -93,7 +99,7 @@ Entity* LevelScene::GetPlayer() const
 
 void LevelScene::CreatePlayer()
 {
-	m_pTextureCache->LoadTexture("player", "player.png");
+	m_pTextureCache->LoadTexture("player", "player_22x25.png");
 
 	m_pPlayer = m_pEntityKeeper->CreateEntity(100, "Player");
 	m_pPlayer->AddComponent(new Transform(m_pPlayer, Vector2f(10, 40)));
@@ -144,9 +150,9 @@ void LevelScene::CreatePlayer()
 		new ConditionalAnimatorTransition("crouch", "idle", "isCrouched", false),
 		new ConditionalAnimatorTransition("crouch", "shootCrouched", "isShooting", true),
 
-		new AnimatorAnimationEndTransition("shoot", "idle"),
+		new AnimationEndAnimatorTransition("shoot", "idle"),
 
-		new AnimatorAnimationEndTransition("shootCrouched", "crouch"),
+		new AnimationEndAnimatorTransition("shootCrouched", "crouch"),
 
 		new ConditionalAnimatorTransition("jump", "idle", "isGrounded", true),
 		new ConditionalAnimatorTransition("jump", "shoot", "isShooting", true),

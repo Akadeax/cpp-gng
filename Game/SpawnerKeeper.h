@@ -5,6 +5,7 @@
 #include "Vector2f.h"
 #include "Zombie.h"
 
+class GreenMonster;
 enum class SpawnerType;
 class EnemySpawner;
 class Enemy;
@@ -29,6 +30,7 @@ private:
 	Transform* m_pPlayer;
 
 	EnemyPool<Zombie>* m_pZombiePool;
+	EnemyPool<GreenMonster>* m_pGreenMonsterPool;
 
 	std::vector<EnemySpawner*> m_RandomEnemySpawners;
 
@@ -50,7 +52,7 @@ private:
 	void RemoveSpawner(const EnemySpawner* self, SpawnerType type);
 
 	void UpdateRandomSpawners(float deltaTime);
-	void UpdateSetSpawners();
+	void UpdateSetSpawners() const;
 
-	Enemy* GetPooledEnemy(EnemyType type);
+	Enemy* GetPooledEnemy(EnemyType type) const;
 };
