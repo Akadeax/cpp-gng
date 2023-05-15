@@ -65,7 +65,7 @@ void GreenMonster::Update(float deltaTime)
 		}
 
 		const float xDiff{ m_pTransform->GetPosition().x - m_pPlayer->GetPosition().x };
-		m_pAnimator->SetFlipX(xDiff > 0);
+		m_pAnimator->SetFlipX(xDiff < 0);
 	}
 }
 

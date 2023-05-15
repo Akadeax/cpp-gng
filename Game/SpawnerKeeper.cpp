@@ -32,6 +32,7 @@ SpawnerKeeper::SpawnerKeeper(LevelScene* pScene)
 SpawnerKeeper::~SpawnerKeeper()
 {
 	delete m_pZombiePool;
+	delete m_pGreenMonsterPool;
 }
 
 void SpawnerKeeper::Update(float deltaTime)
