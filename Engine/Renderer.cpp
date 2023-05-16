@@ -57,3 +57,8 @@ void Renderer::SetFlipY(bool newState)
 {
 	m_FlipY = newState;
 }
+
+void Renderer::SetTexture(Texture* pTexture)
+{
+	m_pTexture = pTexture;
+}

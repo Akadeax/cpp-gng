@@ -16,8 +16,13 @@ public:
 
 	bool IsTouchingLadder() const;
 	LadderCollider* GetTouchedLadder() const;
+
+	void SetCanInteract(bool newVal);
+
 private:
 	PlayerController* m_pPlayerController{ nullptr };
 
 	LadderCollider* m_pTouchedLadder{ nullptr };
+
+	bool m_CanInteract{ true };
 };

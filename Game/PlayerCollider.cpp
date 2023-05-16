@@ -27,7 +27,7 @@ void PlayerCollider::OnCollisionEnter(Collider* other, float deltaTime)
 	{
 		m_pTouchedLadder = dynamic_cast<LadderCollider*>(other);
 	}
-	else if (other->CompareTag("Enemy"))
+	else if (other->CompareTag("Enemy") && m_CanInteract)
 	{
 		m_pPlayerController->Damage(other->GetTransform()->GetPosition());
 	}
@@ -49,4 +49,9 @@ bool PlayerCollider::IsTouchingLadder() const
 LadderCollider* PlayerCollider::GetTouchedLadder() const
 {
 	return m_pTouchedLadder;
+}
+
+void PlayerCollider::SetCanInteract(bool newVal)
+{
+	m_CanInteract = newVal;
 }

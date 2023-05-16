@@ -19,6 +19,8 @@ public:
 	bool GetFlipY() const;
 	void SetFlipY(bool newState);
 
+	void SetTexture(Texture* pTexture);
+
 protected:
 	Texture* m_pTexture;
 	Transform* m_pParentTransform{ nullptr };

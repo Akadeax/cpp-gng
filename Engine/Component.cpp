@@ -30,3 +30,8 @@ InputHandler* Component::GetInputHandler() const
 {
 	return m_pParent->GetScene()->GetGame()->GetInputHandler();
 }
+
+TextureCache* Component::GetTextureCache() const
+{
+	return m_pParent->GetScene()->GetTextureCache();
+}

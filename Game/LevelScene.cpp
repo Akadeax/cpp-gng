@@ -17,6 +17,7 @@
 #include "PhysicsBody.h"
 #include "PlayerController.h"
 #include "Game.h"
+#include "InputHandler.h"
 #include "LadderCollider.h"
 #include "PhysicsHandler.h"
 #include "PlayerCamera.h"
@@ -29,8 +30,6 @@
 
 void LevelScene::InitializeScene()
 {
-	std::cout << "Controls:\nArrows keys: move\nJ: jump\nK: shoot\n";
-
 	CreatePlayer();
 
 	m_pProjectilePool = new ProjectilePool(this);
@@ -72,6 +71,11 @@ void LevelScene::UpdateScene(float deltaTime)
 	// Parallax the background
 	const float newXPos{ (m_pCamera->GetPosition().x * 0.2f) };
 	m_pBackgroundTransform->SetPosition(Vector2f(newXPos, 0));
+
+	if (m_pGame->GetInputHandler()->GetKeyDown("information"))
+	{
+		std::cout << "Controls:\nArrows keys: move\nJ: jump\nK: shoot\n";
+	}
 }
 
 void LevelScene::DrawScene() const
@@ -100,6 +104,7 @@ Entity* LevelScene::GetPlayer() const
 void LevelScene::CreatePlayer()
 {
 	m_pTextureCache->LoadTexture("player", "player_22x25.png");
+	m_pTextureCache->LoadTexture("playerNaked", "playerNaked_22x25.png");
 
 	m_pPlayer = m_pEntityKeeper->CreateEntity(100, "Player");
 	m_pPlayer->AddComponent(new Transform(m_pPlayer, Vector2f(10, 40)));
@@ -137,6 +142,12 @@ void LevelScene::CreatePlayer()
 		}))},
 	{ "hurt", new AnimatorState(new Animation(std::vector<AnimationFrame*>{
 			new AnimationFrame(1.f, Rectf(spriteWidth * 0, spriteHeight * 5, spriteWidth, spriteHeight)),
+		}))},
+	{ "deadAir", new AnimatorState(new Animation(std::vector<AnimationFrame*>{
+			new AnimationFrame(1.f, Rectf(spriteWidth * 1, spriteHeight * 5, spriteWidth, spriteHeight)),
+		}))},
+	{ "deadGround", new AnimatorState(new Animation(std::vector<AnimationFrame*>{
+			new AnimationFrame(1.f, Rectf(spriteWidth * 2, spriteHeight * 5, spriteWidth, spriteHeight)),
 		}))},
 	};
 

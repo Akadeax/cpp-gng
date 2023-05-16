@@ -12,6 +12,7 @@
 #include "PhysicsHandler.h"
 #include "PlayerCollider.h"
 #include "ProjectilePool.h"
+#include "TextureCache.h"
 #include "Transform.h"
 #include "utils.h"
 
@@ -61,14 +62,25 @@ void PlayerController::Update(float deltaTime)
 		m_pPhysicsBody->SetYVelocity(0);
 	}
 
+	if (m_IsDead)
+	{
+		if (m_IsGrounded)
+		{
+			m_pAnimator->SetState("deadGround");
+			m_pPhysicsBody->SetXVelocity(0);
+			m_pCollider->SetCanInteract(false);
+		}
+
+		return;
+	}
+
 	m_pAnimator->SetParameter("isHurt", m_HurtTimer > 0);
 	if (m_HurtTimer > 0.f)
 	{
 		m_HurtTimer -= deltaTime;
-		UpdateHurt();
+		UpdateHurt(deltaTime);
 		return;
 	}
-
 
 	UpdateGroundMovement();
 
@@ -80,32 +92,32 @@ void PlayerController::Update(float deltaTime)
 
 void PlayerController::Draw() const
 {
-	// Draw grounded check
-	const Vector2f bottomLeft{ m_pTransform->GetPosition() + Vector2f(-m_ColliderWidth / 2 + 1, -m_ColliderHeight / 2 - 0.5f) };
-	const Vector2f bottomRight{ bottomLeft + Vector2f(m_ColliderWidth - 2, 0) };
-
-	utils::SetColor(Color4f(0, 1, 0, 1));
-	utils::DrawLine(bottomLeft.ToPoint2f(), bottomRight.ToPoint2f());
 }
 
 void PlayerController::Damage(Vector2f from)
 {
+	m_pCollider->SetCanInteract(false);
+
 	if (m_HasArmor)
 	{
 		m_HasArmor = false;
 		m_HurtTimer = m_DamagedInactiveTime;
+		m_pAnimator->SetTexture(GetTextureCache()->GetTexture("playerNaked"));
 	}
 	else
 	{
 		// Dead
-		m_HurtTimer = 100.f;
+		m_HurtTimer = FLT_MAX;
+		m_IsDead = true;
+		m_pAnimator->SetState("deadAir");
 	}
 
 	const Vector2f hitDirection{ from - m_pTransform->GetPosition() };
 	const float directionMultiplier{ hitDirection.x > 0 ? -1.f : 1.f };
 
 	m_IsGrounded = false;
-	m_pTransform->MovePosition(Vector2f(0, 1));
+	const float depenetrationAmount{ 2.f };
+	m_pTransform->MovePosition(Vector2f(static_cast<float>(utils::Sign(-hitDirection.x)) * depenetrationAmount, depenetrationAmount));
 	m_pPhysicsBody->SetVelocity(Vector2f(m_DamagedHorizontalVelocity * directionMultiplier, m_DamagedVerticalVelocity));
 
 	m_IsClimbing = false;
@@ -274,10 +286,16 @@ void PlayerController::UpdateShooting(float deltaTime)
 	m_pAnimator->SetParameter("isShooting", m_IsShooting);
 }
 
-void PlayerController::UpdateHurt()
+void PlayerController::UpdateHurt(float deltaTime)
 {
 	if (m_IsGrounded && m_HurtTimer > 0.f)
 	{
 		m_HurtTimer = 0.f;
+		m_pCollider->SetCanInteract(false);
+	}
+
+	if (m_HurtTimer - deltaTime <= 0.f)
+	{
+		m_pCollider->SetCanInteract(true);
 	}
 }

@@ -7,6 +7,8 @@
 GhostsAndGoblins::GhostsAndGoblins(const Window& window)
 	: Game(window, new LevelScene())
 {
+	m_pInputHandler->AddKey("information", SDL_SCANCODE_I);
+
 	m_pInputHandler->AddKey("left", SDL_SCANCODE_LEFT);
 	m_pInputHandler->AddKey("right", SDL_SCANCODE_RIGHT);
 	m_pInputHandler->AddKey("up", SDL_SCANCODE_UP);

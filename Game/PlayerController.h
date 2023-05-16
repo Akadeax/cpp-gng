@@ -36,7 +36,7 @@ private:
 	void CheckGrounded(float deltaTime);
 	void UpdateJumping() const;
 	void UpdateShooting(float deltaTime);
-	void UpdateHurt();
+	void UpdateHurt(float deltaTime);
 
 	const float m_GravityScale{ 175.f };
 
@@ -65,4 +65,6 @@ private:
 	const float m_DamagedInactiveTime{ 0.5f };
 	const float m_DamagedHorizontalVelocity{ 50.f };
 	const float m_DamagedVerticalVelocity{ 50.f };
+
+	bool m_IsDead{ false };
 };
