@@ -6,7 +6,7 @@ Transform::Transform(Entity* parent)
 {
 }
 
-Transform::Transform(Entity* parent, Vector2f startingPos)
+Transform::Transform(Entity* parent, const Vector2f& startingPos)
 	: Component(parent)
 	, m_Position{ startingPos }
 	, m_RotationDeg{ 0.f }
@@ -14,17 +14,17 @@ Transform::Transform(Entity* parent, Vector2f startingPos)
 {
 }
 
-Vector2f Transform::GetPosition() const
+const Vector2f& Transform::GetPosition() const
 {
 	return m_Position;
 }
 
-void Transform::SetPosition(Vector2f newPos)
+void Transform::SetPosition(const Vector2f& newPos)
 {
 	m_Position = newPos;
 }
 
-void Transform::MovePosition(Vector2f delta)
+void Transform::MovePosition(const Vector2f& delta)
 {
 	m_Position += delta;
 }

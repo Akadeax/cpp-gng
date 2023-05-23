@@ -11,9 +11,9 @@ public:
 	Camera(Camera&& rhs) = delete;
 	virtual ~Camera() = default;
 
-	Vector2f GetPosition() const;
-	void SetPosition(Vector2f newPos);
-	void MovePosition(Vector2f moveBy);
+	const Vector2f& GetPosition() const;
+	void SetPosition(const Vector2f& newPos);
+	void MovePosition(const Vector2f& moveBy);
 
 	virtual void Update(float deltaTime);
 	virtual void Draw() const;

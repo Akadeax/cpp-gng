@@ -165,6 +165,7 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemySpawner.cpp" />
     <ClCompile Include="GreenMonster.cpp" />
+    <ClCompile Include="MovingPlatform.cpp" />
     <ClCompile Include="SpawnerKeeper.cpp" />
     <ClCompile Include="GhostsAndGoblins.cpp" />
     <ClCompile Include="LadderCollider.cpp" />
@@ -192,6 +193,7 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s
     <ClInclude Include="EnemyPool.h" />
     <ClInclude Include="EnemySpawner.h" />
     <ClInclude Include="GreenMonster.h" />
+    <ClInclude Include="MovingPlatform.h" />
     <ClInclude Include="SpawnerKeeper.h" />
     <ClInclude Include="GhostsAndGoblins.h" />
     <ClInclude Include="LadderCollider.h" />

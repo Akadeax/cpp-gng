@@ -196,6 +196,12 @@ InputHandler* Game::GetInputHandler() const
 	return m_pInputHandler;
 }
 
+void Game::MarkSceneLoad(Scene* pScene)
+{
+	m_pCurrentScene->MarkForDeletion();
+	m_pSceneLoadBuffer = pScene;
+}
+
 void Game::CleanupGameEngine()
 {
 	SDL_GL_DeleteContext(m_pContext);
@@ -225,6 +231,14 @@ void Game::Update(float deltaTime)
 	m_pCurrentScene->Update(deltaTime);
 
 	UpdateGame(deltaTime);
+
+	if (m_pCurrentScene->IsMarkedForDeletion())
+	{
+		delete m_pCurrentScene;
+
+		m_pCurrentScene = m_pSceneLoadBuffer;
+		m_pCurrentScene->Initialize(this);
+	}
 }
 
 void Game::Draw() const

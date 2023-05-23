@@ -33,6 +33,9 @@ public:
 	PhysicsHandler* GetPhysicsHandler() const;
 	TextureCache* GetTextureCache() const;
 
+	void MarkForDeletion();
+	bool IsMarkedForDeletion() const;
+
 protected:
 	Game* m_pGame;
 
@@ -40,4 +43,6 @@ protected:
 	PhysicsHandler* m_pPhysicsHandler;
 	TextureCache* m_pTextureCache;
 	Camera* m_pCamera;
+
+	bool m_MarkedForDeletion{ false };
 };

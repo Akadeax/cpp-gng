@@ -2,7 +2,7 @@
 
 #include "AnimationFrame.h"
 
-AnimationFrame::AnimationFrame(float duration, Rectf spriteData)
+AnimationFrame::AnimationFrame(float duration, const Rectf& spriteData)
     : m_Duration{ duration }, m_SpriteData{ spriteData }
 {
 }

@@ -71,6 +71,9 @@
     <ClCompile Include="GreenMonster.cpp">
       <Filter>Source\Enemy\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="MovingPlatform.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GhostsAndGoblins.h">
@@ -120,6 +123,9 @@
     </ClInclude>
     <ClInclude Include="GreenMonster.h">
       <Filter>Source\Enemy\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="MovingPlatform.h">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

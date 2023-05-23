@@ -14,7 +14,7 @@ public:
 	PhysicsHandler& operator=(PhysicsHandler&& rhs) = delete;
 	PhysicsHandler(const PhysicsHandler& rhs) = delete;
 	PhysicsHandler(PhysicsHandler&& rhs) = delete;
-	virtual ~PhysicsHandler() = default;
+	~PhysicsHandler() = default;
 
 	void Update(float deltaTime);
 	void DrawDebugColliders() const;
@@ -25,7 +25,7 @@ public:
 	void RemoveCollider(Collider* collider);
 	void RemovePhysicsBody(PhysicsBody* physicsBody);
 
-	std::pair<bool, Collider*> Linecast(Vector2f p1, Vector2f p2, const std::string& tag = "", bool hitTriggers = false) const;
+	std::pair<bool, Collider*> Linecast(const Vector2f& p1, const Vector2f& p2, const std::string& tag = "", bool hitTriggers = false) const;
 
 private:
 	std::list<Collider*> m_Colliders;

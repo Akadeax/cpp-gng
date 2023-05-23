@@ -13,8 +13,8 @@ public:
 	Animation(Animation&& rhs) = delete;
 	~Animation();
 
-	AnimationFrame* GetFrame(int frameNr) const;
-	std::vector<AnimationFrame*> GetFrames() const;
+	const AnimationFrame* GetFrame(int frameNr) const;
+	const std::vector<AnimationFrame*>& GetFrames() const;
 	float GetTotalDuration() const;
 
 private:

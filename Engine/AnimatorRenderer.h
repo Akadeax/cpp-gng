@@ -17,6 +17,11 @@ public:
         const std::string& entryState
     );
 
+    AnimatorRenderer& operator=(const AnimatorRenderer& rhs) = delete;
+    AnimatorRenderer& operator=(AnimatorRenderer&& rhs) = delete;
+    AnimatorRenderer(const AnimatorRenderer& rhs) = delete;
+    AnimatorRenderer(AnimatorRenderer&& rhs) = delete;
+
     ~AnimatorRenderer() override;
 
     void Initialize() override;

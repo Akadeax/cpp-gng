@@ -11,6 +11,10 @@ class PhysicsBody final : public Component
 {
 public:
 	explicit PhysicsBody(Entity* parent);
+	PhysicsBody& operator=(const PhysicsBody& rhs) = delete;
+	PhysicsBody& operator=(PhysicsBody&& rhs) = delete;
+	PhysicsBody(const PhysicsBody& rhs) = delete;
+	PhysicsBody(PhysicsBody&& rhs) = delete;
 	~PhysicsBody() override;
 
 	void Initialize() override;
@@ -18,11 +22,11 @@ public:
 	Transform* GetTransform() const;
 	Collider* GetCollider() const;
 
-	Vector2f GetVelocity() const;
-	void SetVelocity(Vector2f velocity);
+	const Vector2f& GetVelocity() const;
+	void SetVelocity(const Vector2f& velocity);
 	void SetXVelocity(float x);
 	void SetYVelocity(float y);
-	void AddVelocity(Vector2f velocity);
+	void AddVelocity(const Vector2f& velocity);
 
 private:
 	Transform* m_pTransform{ nullptr };

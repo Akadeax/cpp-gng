@@ -9,19 +9,42 @@
 #include "PhysicsHandler.h"
 #include "Transform.h"
 
-Collider::Collider(Entity* pParent, std::vector<Vector2f> vertices, bool isTrigger)
+Collider::Collider(Entity* pParent, const std::vector<Vector2f>& vertices, bool isTrigger)
 	: Component(pParent)
 	, m_IsTrigger{ isTrigger }
 {
 	assert((vertices.size() > 2 || vertices.empty()) && "Not enough vertices given for collider");
 
-	m_BaseVertices = std::move(vertices);
+	m_BaseVertices = vertices;
 	m_TransformedVertices = std::vector<Vector2f>(m_BaseVertices.size());
 }
 
 Collider::~Collider()
 {
 	GetPhysicsHandler()->RemoveCollider(this);
+}
+
+Collider* Collider::FromBottomLeft(Entity* pParent, const Vector2f& bottomLeft, const Vector2f& size, bool isTrigger)
+{
+	return new Collider(pParent, std::vector<Vector2f>{
+		bottomLeft,
+		Vector2f(bottomLeft.x, bottomLeft.y + size.y),
+		Vector2f(bottomLeft.x + size.x, bottomLeft.y + size.y),
+		Vector2f(bottomLeft.x + size.x, bottomLeft.y),
+	}, isTrigger);
+}
+
+Collider* Collider::FromCenter(Entity* pParent, const Vector2f& center, const Vector2f& size, bool isTrigger)
+{
+	const float halfSizeX{ size.x / 2.f };
+	const float halfSizeY{ size.x / 2.f };
+
+	return new Collider(pParent, std::vector<Vector2f>{
+		Vector2f(center.x - halfSizeX, center.y - halfSizeY),
+		Vector2f(center.x - halfSizeX, center.y + halfSizeY),
+		Vector2f(center.x + halfSizeX, center.y + halfSizeY),
+		Vector2f(center.x + halfSizeX, center.y - halfSizeY),
+	}, isTrigger);
 }
 
 void Collider::Initialize()
@@ -105,9 +128,9 @@ std::vector<Vector2f>& Collider::GetBaseVertices()
 	return m_BaseVertices;
 }
 
-void Collider::SetBaseVertices(std::vector<Vector2f> newVertices)
+void Collider::SetBaseVertices(const std::vector<Vector2f>& newVertices)
 {
-	m_BaseVertices = std::move(newVertices);
+	m_BaseVertices = newVertices;
 	m_TransformedVertices = std::vector<Vector2f>(m_BaseVertices.size());
 }
 

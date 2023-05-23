@@ -36,7 +36,7 @@ private:
 	void CreateLevel();
 
 	void CreateLadder(float xCoord) const;
-	void CreateZombieSpawner(Vector2f pos) const;
-	void CreateSetSpawner(Vector2f pos, EnemyType type) const;
+	void CreateZombieSpawner(const Vector2f& pos) const;
+	void CreateSetSpawner(const Vector2f& pos, EnemyType type) const;
 };
 

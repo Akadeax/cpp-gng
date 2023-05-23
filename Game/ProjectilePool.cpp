@@ -46,6 +46,8 @@ void ProjectilePool::FireProjectile(const Projectile::FireData& data) const
 
 		m_Projectiles[i]->SetFireData(data);
 		m_Projectiles[i]->GetParent()->SetActive(true);
+		m_Projectiles[i]->GetParent()->GetComponent<Collider>()->RecalculateTransformedVertices();
+
 		return;
 	}
 }

@@ -38,18 +38,19 @@ private:
 	const float m_RandomMaxSpawnRange{ 150.f };
 
 	// Use vector as random range
-	const Vector2f m_RandomEnemySpawnTimerRange{ Vector2f(3.f, 7.f) };
+	const Vector2f m_RandomEnemySpawnTimerRange{ Vector2f(0.5f, 4.f) };
 	float m_CurrentRandomEnemySpawnTimer{ 0.f };
 
 
 	std::vector<EnemySpawner*> m_SetEnemySpawners;
 
-	const float m_SetSpawnerRange{ 300.f };
+	const float m_SetSpawnerRange{ 200.f };
 
 
 	friend class EnemySpawner;
 	void AddSpawner(EnemySpawner* self, SpawnerType type);
 	void RemoveSpawner(const EnemySpawner* self, SpawnerType type);
+
 
 	void UpdateRandomSpawners(float deltaTime);
 	void UpdateSetSpawners() const;

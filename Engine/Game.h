@@ -28,6 +28,8 @@ public:
 
 	InputHandler* GetInputHandler() const;
 
+	void MarkSceneLoad(Scene* pScene);
+
 protected:
 	// The window properties
 	const Window m_Window;
@@ -50,4 +52,6 @@ protected:
 
 	void Update(float deltaTime);
 	void Draw() const;
+
+	Scene* m_pSceneLoadBuffer{ nullptr };
 };

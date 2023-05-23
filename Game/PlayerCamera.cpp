@@ -5,7 +5,7 @@
 #include "Transform.h"
 
 PlayerCamera::PlayerCamera(Transform* followTarget)
-	: Camera(2.8f)
+	: Camera(3.1f)
 	, m_pFollowTarget{ followTarget }
 {
 }

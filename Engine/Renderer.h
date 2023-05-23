@@ -8,6 +8,11 @@ class Renderer : public Component
 {
 public:
 	explicit Renderer(Entity* pParent, Texture* pTexture);
+	Renderer& operator=(const Renderer& rhs) = delete;
+	Renderer& operator=(Renderer&& rhs) = delete;
+	Renderer(const Renderer& rhs) = delete;
+	Renderer(Renderer&& rhs) = delete;
+	~Renderer() override = default;
 
 	void Initialize() override;
 	void Draw() const override;

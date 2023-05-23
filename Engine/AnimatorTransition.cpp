@@ -2,7 +2,7 @@
 
 #include "AnimatorTransition.h"
 
-AnimatorTransition::AnimatorTransition(std::string origin, std::string destination)
+AnimatorTransition::AnimatorTransition(const std::string& origin, const std::string& destination)
 	: m_OriginState{ origin }, m_DestinationState{ destination }
 {
 }
@@ -11,12 +11,12 @@ AnimatorTransition::~AnimatorTransition()
 {
 }
 
-std::string AnimatorTransition::GetOriginState() const
+const std::string& AnimatorTransition::GetOriginState() const
 {
 	return m_OriginState;
 }
 
-std::string AnimatorTransition::GetDestinationState() const
+const std::string& AnimatorTransition::GetDestinationState() const
 {
 	return m_DestinationState;
 }

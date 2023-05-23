@@ -10,7 +10,7 @@ collisions::CollisionHitInfo collisions::IntersectPolygons(const std::vector<Vec
 	const size_t bSize{ verticesB.size() };
 
 	float depth{ FLT_MAX };
-	Vector2f normal = Vector2f();
+	Vector2f normal{ Vector2f() };
 
 	for (size_t i{ 0 }; i < aSize; i++)
 	{
@@ -20,13 +20,6 @@ collisions::CollisionHitInfo collisions::IntersectPolygons(const std::vector<Vec
 		const Vector2f edge{ vB - vA };
 
 		const Vector2f axis{ Vector2f(-edge.y, edge.x).Normalized() };
-
-		//utils::SetColor(Color4f(0, 1, 0, 1));
-		//utils::DrawLine(axis, 1);
-
-		//utils::SetColor(Color4f(0, 1, 0, 1));
-		//utils::DrawLine(axis * 1000, 2);
-		//utils::DrawLine(-axis * 1000, 2);
 
 		float minA, maxA, minB, maxB;
 		ProjectVertices(verticesA, axis, minA, maxA);
@@ -51,12 +44,7 @@ collisions::CollisionHitInfo collisions::IntersectPolygons(const std::vector<Vec
 		const Vector2f edge{ vB - vA };
 
 		const Vector2f axis{ Vector2f(-edge.y, edge.x).Normalized() };
-		//utils::SetColor(Color4f(0, 1, 0, 1));
-		//utils::DrawLine(axis, 1);
 
-		//utils::SetColor(Color4f(0, 1, 0, 1));
-		//utils::DrawLine(axis * 1000, 2);
-		//utils::DrawLine(-axis * 1000, 2);
 		float minA, maxA, minB, maxB;
 		ProjectVertices(verticesA, axis, minA, maxA);
 		ProjectVertices(verticesB, axis, minB, maxB);
@@ -100,7 +88,7 @@ Vector2f collisions::FindArithmeticMean(const std::vector<Vector2f>& vertices)
 	return Vector2f(sumX / static_cast<float>(vertexAmount), sumY / static_cast<float>(vertexAmount));
 }
 
-void collisions::ProjectVertices(const std::vector<Vector2f>& vertices, Vector2f axis, float& min, float& max)
+void collisions::ProjectVertices(const std::vector<Vector2f>& vertices, const Vector2f& axis, float& min, float& max)
 {
 	min = FLT_MAX;
 	max = -FLT_MAX;
@@ -120,7 +108,7 @@ void collisions::ProjectVertices(const std::vector<Vector2f>& vertices, Vector2f
 	}
 }
 
-bool collisions::IntersectLinePolygon(Vector2f p1, Vector2f p2, const std::vector<Vector2f>& vertices)
+bool collisions::IntersectLinePolygon(const Vector2f& p1, const Vector2f& p2, const std::vector<Vector2f>& vertices)
 {
 	if (IntersectPointPolygon(p1, vertices)) return true;
 
@@ -138,7 +126,7 @@ bool collisions::IntersectLinePolygon(Vector2f p1, Vector2f p2, const std::vecto
 	return false;
 }
 
-bool collisions::IntersectLines(Vector2f p1, Vector2f p2, Vector2f p3, Vector2f p4)
+bool collisions::IntersectLines(const Vector2f& p1, const Vector2f& p2, const Vector2f& p3, const Vector2f& p4)
 {
 	// http://jeffreythompson.org/collision-detection/line-line.php
 	const float uA{ ((p4.x - p3.x) * (p1.y - p3.y) - (p4.y - p3.y) * (p1.x - p3.x)) / ((p4.y - p3.y) * (p2.x - p1.x) - (p4.x - p3.x) * (p2.y - p1.y)) };
@@ -151,7 +139,7 @@ bool collisions::IntersectLines(Vector2f p1, Vector2f p2, Vector2f p3, Vector2f 
 	return false;
 }
 
-bool collisions::IntersectPointPolygon(Vector2f p1, const std::vector<Vector2f>& vertices)
+bool collisions::IntersectPointPolygon(const Vector2f& p1, const std::vector<Vector2f>& vertices)
 {
 	// http://jeffreythompson.org/collision-detection/poly-point.php
 	bool collision{ false };

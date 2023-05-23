@@ -325,7 +325,7 @@ void Texture::Draw( const Rectf& dstRect, const Rectf& srcRect ) const
 	glDisable( GL_TEXTURE_2D );
 }
 
-void Texture::DrawCentered(const Rectf& srcRect, const Vector2f offset) const
+void Texture::DrawCentered(const Rectf& srcRect, const Vector2f& offset) const
 {
 	const Point2f centeredDstPoint = Point2f(
 		offset.x - (srcRect.width / 2),

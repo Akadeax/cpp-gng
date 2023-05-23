@@ -16,7 +16,7 @@ EnemySpawner::EnemySpawner(Entity* pParent, const LevelScene* pScene, SpawnerTyp
 	pScene->GetSpawnerKeeper()->AddSpawner(this, m_SpawnerType);
 }
 
-Vector2f EnemySpawner::GetPosition() const
+const Vector2f& EnemySpawner::GetPosition() const
 {
 	return GetParent()->GetComponent<Transform>()->GetPosition();
 }

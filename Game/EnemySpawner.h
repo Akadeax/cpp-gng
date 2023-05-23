@@ -16,7 +16,7 @@ class EnemySpawner final : public Component
 public:
 	EnemySpawner(Entity* pParent, const LevelScene* pScene, SpawnerType spawnerType, EnemyType enemyType);
 
-	Vector2f GetPosition() const;
+	const Vector2f& GetPosition() const;
 	EnemyType GetEnemyType() const;
 
 	bool HasSpawned() const { return m_HasSpawned; }

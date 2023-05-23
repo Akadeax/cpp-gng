@@ -38,12 +38,12 @@ Collider* PhysicsBody::GetCollider() const
     return m_pCollider;
 }
 
-Vector2f PhysicsBody::GetVelocity() const
+const Vector2f& PhysicsBody::GetVelocity() const
 {
     return m_Velocity;
 }
 
-void PhysicsBody::SetVelocity(Vector2f velocity)
+void PhysicsBody::SetVelocity(const Vector2f& velocity)
 {
     m_Velocity = velocity;
 }
@@ -58,7 +58,7 @@ void PhysicsBody::SetYVelocity(float y)
     m_Velocity.y = y;
 }
 
-void PhysicsBody::AddVelocity(Vector2f velocity)
+void PhysicsBody::AddVelocity(const Vector2f& velocity)
 {
     m_Velocity += velocity;
 }

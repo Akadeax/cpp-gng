@@ -19,6 +19,7 @@
 #include "Game.h"
 #include "InputHandler.h"
 #include "LadderCollider.h"
+#include "MovingPlatform.h"
 #include "PhysicsHandler.h"
 #include "PlayerCamera.h"
 #include "PlayerCollider.h"
@@ -107,7 +108,8 @@ void LevelScene::CreatePlayer()
 	m_pTextureCache->LoadTexture("playerNaked", "playerNaked_22x25.png");
 
 	m_pPlayer = m_pEntityKeeper->CreateEntity(100, "Player");
-	m_pPlayer->AddComponent(new Transform(m_pPlayer, Vector2f(10, 40)));
+	//m_pPlayer->AddComponent(new Transform(m_pPlayer, Vector2f(100, 40)));
+	m_pPlayer->AddComponent(new Transform(m_pPlayer, Vector2f(1600, 40)));
 
 	// RENDERING
 	const float spriteWidth{ 22.f };
@@ -230,19 +232,7 @@ void LevelScene::CreateLevel()
 	pForeground->AddComponent(new Transform(pForeground, Vector2f(0, 0)));
 	pForeground->AddComponent(new Renderer(pForeground, foreground));
 
-	// Hardcoded values for map collision TODO: json-ify
-	pForeground->AddComponent(new Collider(pForeground, std::vector<Vector2f>{
-		Vector2f(0, 0),
-			Vector2f(0, 40),
-			Vector2f(2000, 40),
-			Vector2f(2000, 0),
-	}));
-	pForeground->AddComponent(new Collider(pForeground, std::vector<Vector2f>{
-		Vector2f(610 + 492, 110),
-			Vector2f(610 + 492, 110 + 10),
-			Vector2f(610, 110 + 10),
-			Vector2f(610, 110),
-	}));
+	// Left wall block
 	pForeground->AddComponent(new Collider(pForeground, std::vector<Vector2f>{
 		Vector2f(-5, 0),
 			Vector2f(-5, 200),
@@ -250,7 +240,53 @@ void LevelScene::CreateLevel()
 			Vector2f(0, 0),
 	}));
 
+	// Map collision
+	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(0, 0), Vector2f(1662, 40)));
+	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(610, 111), Vector2f(494, 9)));
+	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(1791, 0), Vector2f(159, 40)));
+	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(1983, 0), Vector2f(159, 40)));
+	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(2047, 0), Vector2f(400, 40)));
+	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(2478, 0), Vector2f(225, 40)));
+	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(2735, 0), Vector2f(846, 39)));
+
+	// Graves
+	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(47, 40), Vector2f(16, 16)));
+	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(239, 40), Vector2f(16, 16)));
+	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(415, 40), Vector2f(16, 16)));
+	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(527, 40), Vector2f(16, 16)));
+	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(751, 40), Vector2f(16, 16)));
+	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(959, 40), Vector2f(16, 16)));
+	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(1103, 40), Vector2f(16, 16)));
+	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(1263, 40), Vector2f(16, 16)));
+	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(1519, 40), Vector2f(16, 16)));
+
+	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(767, 120), Vector2f(16, 16)));
+	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(863, 120), Vector2f(16, 16)));
+	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(959, 120), Vector2f(16, 16)));
+	
 	pForeground->Initialize();
+
+
+	Texture* pMovingPlatformTexture{ GetTextureCache()->LoadTexture("movingPlatform", "movingPlatform.png")};
+
+	Entity* pMovingPlatform1{ GetEntityKeeper()->CreateEntity(5) };
+
+	pMovingPlatform1->AddComponent(new Transform(pMovingPlatform1, Vector2f(1672, 25)));
+
+	const Vector2f movingPlatformSize{ Vector2f(30.f, 15.f) };
+	pMovingPlatform1->AddComponent(new MovingPlatform(
+		pMovingPlatform1,
+		std::vector<Vector2f>{
+			Vector2f(-movingPlatformSize.x / 2.f, -movingPlatformSize.y / 2.f),
+			Vector2f(-movingPlatformSize.x / 2.f, movingPlatformSize.y / 2.f),
+			Vector2f(movingPlatformSize.x / 2.f, movingPlatformSize.y / 2.f),
+			Vector2f(movingPlatformSize.x / 2.f, -movingPlatformSize.y / 2.f),
+		},
+		1688, 1755
+	));
+	pMovingPlatform1->AddComponent(new Renderer(pMovingPlatform1, pMovingPlatformTexture));
+
+	pMovingPlatform1->Initialize();
 
 	CreateLadder(727);
 	CreateLadder(919);
@@ -275,14 +311,14 @@ void LevelScene::CreateLadder(float xCoord) const
 	pLadder->Initialize();
 }
 
-void LevelScene::CreateZombieSpawner(Vector2f pos) const
+void LevelScene::CreateZombieSpawner(const Vector2f& pos) const
 {
 	Entity* pSpawner{ GetEntityKeeper()->CreateEntity() };
 	pSpawner->AddComponent(new Transform(pSpawner, pos));
 	pSpawner->AddComponent(new EnemySpawner(pSpawner, this, SpawnerType::random, EnemyType::zombie));
 }
 
-void LevelScene::CreateSetSpawner(Vector2f pos, EnemyType type) const
+void LevelScene::CreateSetSpawner(const Vector2f& pos, EnemyType type) const
 {
 	Entity* pSpawner{ GetEntityKeeper()->CreateEntity() };
 	pSpawner->AddComponent(new Transform(pSpawner, pos));

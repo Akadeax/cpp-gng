@@ -4,8 +4,8 @@
 #include "AnimationFrame.h"
 
 Animation::Animation(const std::vector<AnimationFrame*>& frames)
+	: m_Frames{ frames }
 {
-    m_Frames = frames;
     for (const AnimationFrame* frame : frames)
     {
         m_TotalDuration += frame->GetDuration();
@@ -21,12 +21,12 @@ Animation::~Animation()
     }
 }
 
-AnimationFrame* Animation::GetFrame(int frameNr) const
+const AnimationFrame* Animation::GetFrame(int frameNr) const
 {
     return m_Frames[frameNr];
 }
 
-std::vector<AnimationFrame*> Animation::GetFrames() const
+const std::vector<AnimationFrame*>& Animation::GetFrames() const
 {
     return m_Frames;
 }

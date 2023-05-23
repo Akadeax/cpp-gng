@@ -6,12 +6,17 @@ class Transform final : public Component
 {
 public:
 	explicit Transform(Entity* parent);
-	explicit Transform(Entity* parent, Vector2f startingPos);
+	explicit Transform(Entity* parent, const Vector2f& startingPos);
+	Transform& operator=(const Transform& rhs) = delete;
+	Transform& operator=(Transform&& rhs) = delete;
+	Transform(const Transform& rhs) = delete;
+	Transform(Transform&& rhs) = delete;
+	~Transform() override = default;
 
-	Vector2f GetPosition() const;
+	const Vector2f& GetPosition() const;
 
-	void SetPosition(Vector2f newPos);
-	void MovePosition(Vector2f delta);
+	void SetPosition(const Vector2f& newPos);
+	void MovePosition(const Vector2f& delta);
 
 	void SetXPosition(float newX);
 	void SetYPosition(float newY);

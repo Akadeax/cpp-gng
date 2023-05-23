@@ -17,7 +17,7 @@ public:
 
 	void Draw(const Point2f& dstBottomLeft = {}, const Rectf& srcRect = {}) const;
 	void Draw( const Rectf& dstRect, const Rectf& srcRect = {} ) const;
-	void DrawCentered(const Rectf& srcRect = {}, Vector2f offset = {}) const;
+	void DrawCentered(const Rectf& srcRect = {}, const Vector2f& offset = {}) const;
 
 	float GetWidth() const;
 	float GetHeight() const;

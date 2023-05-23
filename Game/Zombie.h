@@ -37,7 +37,7 @@ private:
 	EnemyPool<Zombie>* m_ReturnTo;
 
 	int m_WalkingDirMultiplier{ 0 };
-	const float m_WalkSpeed{ 30.f };
+	const float m_WalkSpeed{ 50.f };
 
 	bool m_IsDead{ false };
 	const float m_DeathTime{ 0.3f };

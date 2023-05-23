@@ -5,6 +5,7 @@
 
 #include "AnimatorRenderer.h"
 #include "Entity.h"
+#include "Game.h"
 #include "InputHandler.h"
 #include "LadderCollider.h"
 #include "LevelScene.h"
@@ -64,6 +65,13 @@ void PlayerController::Update(float deltaTime)
 
 	if (m_IsDead)
 	{
+		m_DeathResetTime -= deltaTime;
+
+		if (m_DeathResetTime < 0.f)
+		{
+			GetParent()->GetScene()->GetGame()->MarkSceneLoad(new LevelScene());
+		}
+
 		if (m_IsGrounded)
 		{
 			m_pAnimator->SetState("deadGround");
@@ -88,13 +96,18 @@ void PlayerController::Update(float deltaTime)
 
 	UpdateJumping();
 	UpdateShooting(deltaTime);
+
+	if (m_pTransform->GetPosition().y < -10.f)
+	{
+		m_IsDead = true;
+	}
 }
 
 void PlayerController::Draw() const
 {
 }
 
-void PlayerController::Damage(Vector2f from)
+void PlayerController::Damage(const Vector2f& from)
 {
 	m_pCollider->SetCanInteract(false);
 

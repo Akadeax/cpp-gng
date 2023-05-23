@@ -8,8 +8,15 @@ class Transform;
 class Collider : public Component
 {
 public:
-	explicit Collider(Entity* pParent, std::vector<Vector2f> vertices, bool isTrigger = false);
+	explicit Collider(Entity* pParent, const std::vector<Vector2f>& vertices, bool isTrigger = false);
+	Collider& operator=(const Collider& rhs) = delete;
+	Collider& operator=(Collider&& rhs) = delete;
+	Collider(const Collider& rhs) = delete;
+	Collider(Collider&& rhs) = delete;
 	~Collider() override;
+
+	static Collider* FromBottomLeft(Entity* pParent, const Vector2f& bottomLeft, const Vector2f& size, bool isTrigger = false);
+	static Collider* FromCenter(Entity* pParent, const Vector2f& center, const Vector2f& size, bool isTrigger = false);
 
 	void Initialize() override;
 
@@ -27,7 +34,7 @@ public:
 	bool CompareTag(const std::string& tag) const;
 
 	std::vector<Vector2f>& GetBaseVertices();
-	void SetBaseVertices(std::vector<Vector2f> newVertices);
+	void SetBaseVertices(const std::vector<Vector2f>& newVertices);
 	const std::vector<Vector2f>& GetTransformedVertices();
 
 	Transform* GetTransform() const;

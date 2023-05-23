@@ -53,7 +53,7 @@ void PhysicsHandler::RemovePhysicsBody(PhysicsBody* physicsBody)
 	m_PhysicsBodies.remove(physicsBody);
 }
 
-std::pair<bool, Collider*> PhysicsHandler::Linecast(Vector2f p1, Vector2f p2, const std::string& tag, bool hitTriggers) const
+std::pair<bool, Collider*> PhysicsHandler::Linecast(const Vector2f& p1, const Vector2f& p2, const std::string& tag, bool hitTriggers) const
 {
 	for (Collider* currentCollider : m_Colliders)
 	{

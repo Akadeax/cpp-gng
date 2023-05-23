@@ -16,7 +16,7 @@ public:
 	void Update(float deltaTime) override;
 	void Draw() const override;
 
-	void Damage(Vector2f from);
+	void Damage(const Vector2f& from);
 
 private:
 	Transform* m_pTransform{ nullptr };
@@ -38,13 +38,13 @@ private:
 	void UpdateShooting(float deltaTime);
 	void UpdateHurt(float deltaTime);
 
-	const float m_GravityScale{ 175.f };
+	const float m_GravityScale{ 400.f };
 
 	const float m_ColliderWidth{ 22.f };
 	const float m_ColliderHeight{ 25.f };
 
-	const float m_MovementSpeed{ 50.f };
-	const float m_JumpForce{ 100.f };
+	const float m_MovementSpeed{ 60.f };
+	const float m_JumpForce{ 130.f };
 
 	const float m_CrouchedHitboxHeightMultiplier{ 0.5f };
 
@@ -63,8 +63,10 @@ private:
 	bool m_IsClimbing{ false };
 
 	const float m_DamagedInactiveTime{ 0.5f };
-	const float m_DamagedHorizontalVelocity{ 50.f };
-	const float m_DamagedVerticalVelocity{ 50.f };
+	const float m_DamagedHorizontalVelocity{ 80.f };
+	const float m_DamagedVerticalVelocity{ 80.f };
 
 	bool m_IsDead{ false };
+
+	float m_DeathResetTime{ 3.f };
 };

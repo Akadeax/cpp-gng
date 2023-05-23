@@ -82,3 +82,13 @@ TextureCache* Scene::GetTextureCache() const
 {
 	return m_pTextureCache;
 }
+
+void Scene::MarkForDeletion()
+{
+	m_MarkedForDeletion = true;
+}
+
+bool Scene::IsMarkedForDeletion() const
+{
+	return m_MarkedForDeletion;
+}

@@ -8,7 +8,7 @@ public:
     ConditionalAnimatorTransition(
         const std::string& origin,
         const std::string& destination,
-        std::map<std::string, int> conditions
+        const std::map<std::string, int>& conditions
     );
     // Handy if there's only one transition condition
     ConditionalAnimatorTransition(

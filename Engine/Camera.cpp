@@ -9,17 +9,17 @@ Camera::Camera(float initialScale)
 {
 }
 
-Vector2f Camera::GetPosition() const
+const Vector2f& Camera::GetPosition() const
 {
 	return m_Position;
 }
 
-void Camera::SetPosition(Vector2f newPos)
+void Camera::SetPosition(const Vector2f& newPos)
 {
 	m_Position = newPos;
 }
 
-void Camera::MovePosition(Vector2f moveBy)
+void Camera::MovePosition(const Vector2f& moveBy)
 {
 	m_Position += moveBy;
 }

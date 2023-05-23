@@ -17,7 +17,9 @@ AnimatorRenderer::AnimatorRenderer(
 	std::unordered_map<std::string, AnimatorState*> states,
 	std::list<AnimatorTransition*> transitions,
 	const std::string& entryState
-) : Renderer(parent, texture), m_States{std::move(states)}, m_Transitions{std::move(transitions)}
+)   : Renderer(parent, texture)
+	, m_States{std::move(states)}
+	, m_Transitions{std::move(transitions)}
 {
 	m_CurrentState = m_States[entryState];
 

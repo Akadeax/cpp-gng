@@ -17,9 +17,9 @@ namespace collisions
 	// Polygon Intersection using SAT (Seperating Axis Theorem)
 	CollisionHitInfo IntersectPolygons(const std::vector<Vector2f>& verticesA, const std::vector<Vector2f>& verticesB);
 	Vector2f FindArithmeticMean(const std::vector<Vector2f>& vertices);
-	void ProjectVertices(const std::vector<Vector2f>& vertices, Vector2f axis, float& min, float& max);
+	void ProjectVertices(const std::vector<Vector2f>& vertices, const Vector2f& axis, float& min, float& max);
 
-	bool IntersectLinePolygon(Vector2f p1, Vector2f p2, const std::vector<Vector2f>& vertices);
-	bool IntersectLines(Vector2f p1, Vector2f p2, Vector2f p3, Vector2f p4);
-	bool IntersectPointPolygon(Vector2f p1, const std::vector<Vector2f>& vertices);
+	bool IntersectLinePolygon(const Vector2f& p1, const Vector2f& p2, const std::vector<Vector2f>& vertices);
+	bool IntersectLines(const Vector2f& p1, const Vector2f& p2, const Vector2f& p3, const Vector2f& p4);
+	bool IntersectPointPolygon(const Vector2f& p1, const std::vector<Vector2f>& vertices);
 }
