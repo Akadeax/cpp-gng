@@ -77,6 +77,8 @@ void LevelScene::UpdateScene(float deltaTime)
 	{
 		std::cout << "Controls:\nArrows keys: move\nJ: jump\nK: shoot\n";
 	}
+
+	std::cout << m_pPlayer->GetComponent<Transform>()->GetPosition().x << std::endl;
 }
 
 void LevelScene::DrawScene() const
@@ -222,7 +224,7 @@ void LevelScene::CreateLevel()
 
 	m_pBackgroundTransform = new Transform(pBackground, Vector2f(m_LevelSize.x / 2, 0));
 	pBackground->AddComponent(m_pBackgroundTransform);
-	pBackground->AddComponent(new Renderer(pBackground, background));
+	pBackground->AddComponent(new Renderer(pBackground, background, false));
 
 	pBackground->Initialize();
 
@@ -230,7 +232,7 @@ void LevelScene::CreateLevel()
 	Entity* pForeground{ GetEntityKeeper()->CreateEntity(-5) };
 
 	pForeground->AddComponent(new Transform(pForeground, Vector2f(0, 0)));
-	pForeground->AddComponent(new Renderer(pForeground, foreground));
+	pForeground->AddComponent(new Renderer(pForeground, foreground, false));
 
 	// Left wall block
 	pForeground->AddComponent(new Collider(pForeground, std::vector<Vector2f>{
@@ -244,7 +246,7 @@ void LevelScene::CreateLevel()
 	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(0, 0), Vector2f(1662, 40)));
 	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(610, 111), Vector2f(494, 9)));
 	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(1791, 0), Vector2f(159, 40)));
-	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(1983, 0), Vector2f(159, 40)));
+	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(1983, 0), Vector2f(32, 40)));
 	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(2047, 0), Vector2f(400, 40)));
 	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(2478, 0), Vector2f(225, 40)));
 	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(2735, 0), Vector2f(846, 39)));
@@ -271,9 +273,9 @@ void LevelScene::CreateLevel()
 
 	Entity* pMovingPlatform1{ GetEntityKeeper()->CreateEntity(5) };
 
-	pMovingPlatform1->AddComponent(new Transform(pMovingPlatform1, Vector2f(1672, 25)));
+	pMovingPlatform1->AddComponent(new Transform(pMovingPlatform1, Vector2f(1688, 25)));
 
-	const Vector2f movingPlatformSize{ Vector2f(30.f, 15.f) };
+	const Vector2f movingPlatformSize{ Vector2f(42.f, 13.f) };
 	pMovingPlatform1->AddComponent(new MovingPlatform(
 		pMovingPlatform1,
 		std::vector<Vector2f>{

@@ -33,6 +33,7 @@ struct Rectf
 	float width;
 	float height;
 
+	bool IsEmpty() const;
 };
 
 

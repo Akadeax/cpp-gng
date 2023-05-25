@@ -327,10 +327,19 @@ void Texture::Draw( const Rectf& dstRect, const Rectf& srcRect ) const
 
 void Texture::DrawCentered(const Rectf& srcRect, const Vector2f& offset) const
 {
-	const Point2f centeredDstPoint = Point2f(
-		offset.x - (srcRect.width / 2),
-		offset.y - (srcRect.height / 2)
-	);
+	Point2f centeredDstPoint;
+
+	if (srcRect.IsEmpty())
+	{
+		centeredDstPoint = Point2f(-m_Width / 2, -m_Height / 2);
+	}
+	else
+	{
+		centeredDstPoint = Point2f(
+			offset.x - (srcRect.width / 2),
+			offset.y - (srcRect.height / 2)
+		);
+	}
 
 	Draw(centeredDstPoint, srcRect);
 }

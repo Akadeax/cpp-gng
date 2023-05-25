@@ -23,6 +23,7 @@ void PhysicsHandler::Update(float deltaTime)
 
 }
 
+#ifdef _DEBUG
 void PhysicsHandler::DrawDebugColliders() const
 {
 	for(const Collider* pCollider : m_Colliders)
@@ -32,6 +33,7 @@ void PhysicsHandler::DrawDebugColliders() const
 		pCollider->DrawDebugCollider();
 	}
 }
+#endif
 
 void PhysicsHandler::AddCollider(Collider* collider)
 {

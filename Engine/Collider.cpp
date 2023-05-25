@@ -71,6 +71,7 @@ void Collider::DrawDebugCollider() const
 	}
 }
 
+// Calculates all world-position vertices through Transform and put them into m_TransformedVertices
 void Collider::RecalculateTransformedVertices()
 {
 	if(!IsEnabled())
@@ -89,7 +90,6 @@ void Collider::RecalculateTransformedVertices()
 	const float rotSin{ std::sin(rotation) };
 	const float rotCos{ std::cos(rotation) };
 
-	// Transform all vertices to actual world position
 	for (size_t i{ 0 }; i < m_BaseVertices.size(); ++i)
 	{
 		const Vector2f base{ m_BaseVertices[i] };

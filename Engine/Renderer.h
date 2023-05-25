@@ -7,7 +7,7 @@ class Transform;
 class Renderer : public Component
 {
 public:
-	explicit Renderer(Entity* pParent, Texture* pTexture);
+	explicit Renderer(Entity* pParent, Texture* pTexture, bool centered = true);
 	Renderer& operator=(const Renderer& rhs) = delete;
 	Renderer& operator=(Renderer&& rhs) = delete;
 	Renderer(const Renderer& rhs) = delete;
@@ -32,4 +32,6 @@ protected:
 
 	bool m_FlipX = false;
 	bool m_FlipY = false;
+
+	bool m_Centered = true;
 };

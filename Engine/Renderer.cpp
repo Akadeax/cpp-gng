@@ -6,10 +6,12 @@
 #include "Entity.h"
 #include "Texture.h"
 #include "Transform.h"
+#include "utils.h"
 
-Renderer::Renderer(Entity* pParent, Texture* pTexture)
+Renderer::Renderer(Entity* pParent, Texture* pTexture, bool centered)
 	: Component(pParent)
 	, m_pTexture{ pTexture }
+	, m_Centered{ centered }
 {
 }
 
@@ -21,6 +23,7 @@ void Renderer::Initialize()
 
 void Renderer::Draw() const
 {
+
 	glTranslatef(m_pParentTransform->GetPosition().x, m_pParentTransform->GetPosition().y, 0);
 
 	const float renderScale = m_pParentTransform->GetScale();
@@ -31,11 +34,23 @@ void Renderer::Draw() const
 	);
 
 	DrawSprite();
+
+#ifdef _DEBUG
+	utils::SetColor(Color4f(0, 1, 1, 1));
+	utils::FillEllipse(0, 0, 3, 3);
+#endif
 }
 
 void Renderer::DrawSprite() const
 {
-	m_pTexture->DrawCentered();
+	if (m_Centered)
+	{
+		m_pTexture->DrawCentered();
+	}
+	else
+	{
+		m_pTexture->Draw();
+	}
 }
 
 bool Renderer::GetFlipX() const

@@ -41,6 +41,7 @@ void SpawnerKeeper::Update(float deltaTime)
 	UpdateSetSpawners();
 }
 
+#ifdef _DEBUG
 void SpawnerKeeper::DrawDebugRadius() const
 {
 	glPushMatrix();
@@ -81,6 +82,7 @@ void SpawnerKeeper::DrawDebugRadius() const
 		glPopMatrix();
 	}
 }
+#endif
 
 void SpawnerKeeper::AddSpawner(EnemySpawner* self, SpawnerType type)
 {

@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "MovingPlatform.h"
 
-#include <utility>
-
 #include "Entity.h"
 #include "Transform.h"
 
@@ -33,8 +31,6 @@ void MovingPlatform::Update(float deltaTime)
 	}
 
 	m_pTransform->SetPosition(Vector2f(newX, m_YPos));
-
-
 }
 
 void MovingPlatform::OnCollisionEnter(Collider* other, float deltaTime)

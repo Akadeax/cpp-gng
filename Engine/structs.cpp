@@ -40,6 +40,11 @@ Rectf::Rectf( float left, float bottom, float width, float height )
 {
 }
 
+bool Rectf::IsEmpty() const
+{
+	return left == 0 && bottom == 0 && width == 0 && height == 0;
+}
+
 //-----------------------------------------------------------------
 // Color4f Constructors
 //-----------------------------------------------------------------

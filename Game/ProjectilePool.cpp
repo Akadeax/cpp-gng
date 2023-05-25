@@ -26,7 +26,7 @@ ProjectilePool::ProjectilePool(const LevelScene* pLevelScene)
 		Projectile* pProjectile{ new Projectile(pEntity) };
 		pEntity->AddComponent(pProjectile);
 
-		pEntity->AddComponent(new PartialRenderer(pEntity, pProjectilesTexture, 3, 0, false));
+		pEntity->AddComponent(new PartialRenderer(pEntity, pProjectilesTexture, 4, 0, false));
 
 		pEntity->SetActive(false);
 		pEntity->Initialize();
