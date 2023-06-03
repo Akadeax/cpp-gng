@@ -24,6 +24,9 @@
     <Filter Include="Source\Enemy\Enemies">
       <UniqueIdentifier>{9354dfa1-ef47-4f8e-bf08-e637066411f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\System">
+      <UniqueIdentifier>{4ace9ddb-5c93-406b-b750-77190652dbf7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GhostsAndGoblins.cpp">
@@ -50,12 +53,6 @@
     <ClCompile Include="PlayerCamera.cpp">
       <Filter>Source\Player</Filter>
     </ClCompile>
-    <ClCompile Include="ProjectilePool.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Projectile.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="SpawnerKeeper.cpp">
       <Filter>Source\Enemy</Filter>
     </ClCompile>
@@ -71,8 +68,17 @@
     <ClCompile Include="GreenMonster.cpp">
       <Filter>Source\Enemy\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Source\System</Filter>
+    </ClCompile>
+    <ClCompile Include="ProjectilePool.cpp">
+      <Filter>Source\System</Filter>
+    </ClCompile>
     <ClCompile Include="MovingPlatform.cpp">
-      <Filter>Source</Filter>
+      <Filter>Source\Environment</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss.cpp">
+      <Filter>Source\Enemy\Enemies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -94,17 +100,8 @@
     <ClInclude Include="pch.h">
       <Filter>Source\Base</Filter>
     </ClInclude>
-    <ClInclude Include="constants.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerCamera.h">
       <Filter>Source\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="ProjectilePool.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Projectile.h">
-      <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="SpawnerKeeper.h">
       <Filter>Source\Enemy</Filter>
@@ -124,8 +121,20 @@
     <ClInclude Include="GreenMonster.h">
       <Filter>Source\Enemy\Enemies</Filter>
     </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Source\System</Filter>
+    </ClInclude>
+    <ClInclude Include="ProjectilePool.h">
+      <Filter>Source\System</Filter>
+    </ClInclude>
+    <ClInclude Include="constants.h">
+      <Filter>Source\System</Filter>
+    </ClInclude>
     <ClInclude Include="MovingPlatform.h">
-      <Filter>Source</Filter>
+      <Filter>Source\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss.h">
+      <Filter>Source\Enemy\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

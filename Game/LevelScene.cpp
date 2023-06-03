@@ -58,7 +58,7 @@ void LevelScene::InitializeScene()
 	CreateSetSpawner(Vector2f(800, 119), EnemyType::greenMonster);
 
 
-	CreateSetSpawner(Vector2f(2840, spawnerHeight), EnemyType::greenMonster);
+	CreateSetSpawner(Vector2f(2840, spawnerHeight), EnemyType::boss);
 }
 
 

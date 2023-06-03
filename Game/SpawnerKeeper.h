@@ -5,6 +5,7 @@
 #include "Vector2f.h"
 #include "Zombie.h"
 
+class Boss;
 class GreenMonster;
 enum class SpawnerType;
 class EnemySpawner;
@@ -31,6 +32,7 @@ private:
 
 	EnemyPool<Zombie>* m_pZombiePool;
 	EnemyPool<GreenMonster>* m_pGreenMonsterPool;
+	EnemyPool<Boss>* m_pBossPool;
 
 	std::vector<EnemySpawner*> m_RandomEnemySpawners;
 

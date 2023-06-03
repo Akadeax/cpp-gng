@@ -162,6 +162,7 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Boss.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemySpawner.cpp" />
     <ClCompile Include="GreenMonster.cpp" />
@@ -188,6 +189,7 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s
     <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Boss.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyPool.h" />

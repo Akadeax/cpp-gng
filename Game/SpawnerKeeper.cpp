@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "SpawnerKeeper.h"
 
+#include "Boss.h"
 #include "Collider.h"
 #include "Enemy.h"
 #include "EnemySpawner.h"
@@ -26,6 +27,12 @@ SpawnerKeeper::SpawnerKeeper(LevelScene* pScene)
 	for (int i{ 0 }; i < poolAmount; ++i)
 	{
 		m_pGreenMonsterPool->ReturnObject(GreenMonster::Create(pScene, m_pGreenMonsterPool));
+	}
+
+	m_pBossPool = new EnemyPool<Boss>();
+	for (int i{ 0 }; i < poolAmount; ++i)
+	{
+		m_pBossPool->ReturnObject(Boss::Create(pScene, m_pBossPool));
 	}
 }
 
@@ -182,7 +189,7 @@ void SpawnerKeeper::UpdateSetSpawners() const
 
 Enemy* SpawnerKeeper::GetPooledEnemy(EnemyType type) const
 {
-	Enemy* pEnemy;
+	Enemy* pEnemy{};
 	switch (type)
 	{
 	case EnemyType::zombie:
@@ -191,8 +198,9 @@ Enemy* SpawnerKeeper::GetPooledEnemy(EnemyType type) const
 	case EnemyType::greenMonster:
 		pEnemy = m_pGreenMonsterPool->GetPooledObject();
 		break;
-	default:
-		pEnemy = nullptr;
+	case EnemyType::boss:
+		pEnemy = m_pBossPool->GetPooledObject();
+		break;
 	}
 
 	if (pEnemy == nullptr) return nullptr;
