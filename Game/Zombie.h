@@ -46,4 +46,11 @@ private:
 	bool m_Spawned{ false };
 	const float m_SpawnTime{ 0.5f };
 	float m_CurrentSpawnTime{};
+
+	bool m_Despawning{ false };
+	const float m_DespawnTime{ 0.5f };
+	float m_CurrentDespawnTime{};
+
+	float m_Lifetime{};
+	const float m_TimeUntilDespawn{ 7.f };
 };

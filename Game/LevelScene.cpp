@@ -77,8 +77,6 @@ void LevelScene::UpdateScene(float deltaTime)
 	{
 		std::cout << "Controls:\nArrows keys: move\nJ: jump\nK: shoot\n";
 	}
-
-	std::cout << m_pPlayer->GetComponent<Transform>()->GetPosition().x << std::endl;
 }
 
 void LevelScene::DrawScene() const
@@ -111,7 +109,7 @@ void LevelScene::CreatePlayer()
 
 	m_pPlayer = m_pEntityKeeper->CreateEntity(100, "Player");
 	//m_pPlayer->AddComponent(new Transform(m_pPlayer, Vector2f(100, 40)));
-	m_pPlayer->AddComponent(new Transform(m_pPlayer, Vector2f(1600, 40)));
+	m_pPlayer->AddComponent(new Transform(m_pPlayer, Vector2f(2600, 40)));
 
 	// RENDERING
 	const float spriteWidth{ 22.f };
@@ -234,22 +232,17 @@ void LevelScene::CreateLevel()
 	pForeground->AddComponent(new Transform(pForeground, Vector2f(0, 0)));
 	pForeground->AddComponent(new Renderer(pForeground, foreground, false));
 
-	// Left wall block
-	pForeground->AddComponent(new Collider(pForeground, std::vector<Vector2f>{
-		Vector2f(-5, 0),
-			Vector2f(-5, 200),
-			Vector2f(0, 200),
-			Vector2f(0, 0),
-	}));
-
 	// Map collision
+	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(-5, 0), Vector2f(5, 200)));
+
 	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(0, 0), Vector2f(1662, 40)));
 	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(610, 111), Vector2f(494, 9)));
 	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(1791, 0), Vector2f(159, 40)));
 	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(1983, 0), Vector2f(32, 40)));
 	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(2047, 0), Vector2f(400, 40)));
-	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(2478, 0), Vector2f(225, 40)));
-	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(2735, 0), Vector2f(846, 39)));
+	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(2478, 0), Vector2f(527, 40)));
+
+	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(3005, 0), Vector2f(5, 200)));
 
 	// Graves
 	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(47, 40), Vector2f(16, 16)));

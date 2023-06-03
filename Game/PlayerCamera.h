@@ -17,5 +17,5 @@ private:
     Transform* m_pFollowTarget;
 
     const float m_LeftBoundary{ 0.f };
-    const float m_RightBoundary{ 3580.f };
+    const float m_RightBoundary{ 2715.f };
 };

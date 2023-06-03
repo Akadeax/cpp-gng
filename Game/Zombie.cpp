@@ -43,7 +43,19 @@ void Zombie::Initialize()
 
 void Zombie::Update(float deltaTime)
 {
-	if (m_Spawned && !m_IsDead)
+	if (!m_Despawning && m_Lifetime < m_TimeUntilDespawn)
+	{
+		m_Lifetime += deltaTime;
+	}
+	else if (!m_Despawning && m_Lifetime >= m_TimeUntilDespawn)
+	{
+		m_Despawning = true;
+		m_pCollider->SetEnabled(false);
+		m_pAnimator->SetState("despawn");
+		m_pPhysicsBody->SetXVelocity(0);
+	}
+
+	if (m_Spawned && !m_IsDead && !m_Despawning)
 	{
 		m_pPhysicsBody->SetXVelocity(static_cast<float>(m_WalkingDirMultiplier) * m_WalkSpeed);
 		return;
@@ -60,6 +72,20 @@ void Zombie::Update(float deltaTime)
 		{
 			m_pCollider->SetEnabled(true);
 			m_Spawned = true;
+		}
+	}
+
+	if (m_Despawning)
+	{
+		if (m_CurrentDespawnTime > 0.f)
+		{
+			m_CurrentDespawnTime -= deltaTime;
+		}
+		else
+		{
+			m_Despawning = false;
+			GetParent()->SetActive(false);
+			m_ReturnTo->ReturnObject(this);
 		}
 	}
 	
@@ -86,7 +112,6 @@ void Zombie::Damage()
 
 	m_pCollider->SetEnabled(false);
 
-
 	m_CurrentDeathTime = m_DeathTime;
 	m_IsDead = true;
 }
@@ -99,6 +124,11 @@ void Zombie::ResetEnemy()
 	m_pAnimator->SetParameter("isDead", false);
 
 	m_Spawned = false;
+
+	m_Despawning = false;
+	m_CurrentDespawnTime = m_DespawnTime;
+
+	m_Lifetime = 0.f;
 
 	m_pCollider->SetEnabled(false);
 	m_CurrentSpawnTime = m_SpawnTime;
