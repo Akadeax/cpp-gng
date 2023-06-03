@@ -22,6 +22,8 @@ public:
 	void RemoveComponent();
 
 	void AddComponent(Component* comp);
+	void AddComponentInitialized(Component* comp);
+
 	std::vector<Component*> GetComponents() const;
 
 	void Initialize() const;

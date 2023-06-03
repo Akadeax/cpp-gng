@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "Vector2f.h"
 
+class Collider;
 enum class EnemyType;
 class SpawnerKeeper;
 class ProjectilePool;
@@ -23,6 +24,8 @@ public:
 
 	Entity* GetPlayer() const;
 
+	void AddForegroundCollider(Vector2f bottomLeft, Vector2f size) const;
+
 private:
 	ProjectilePool* m_pProjectilePool{};
 	SpawnerKeeper* m_pSpawnerKeeper{};
@@ -30,6 +33,7 @@ private:
 	Entity* m_pPlayer{};
 
 	Vector2f m_LevelSize{};
+	Entity* m_pForeground{};
 	Transform* m_pBackgroundTransform{};
 
 	void CreatePlayer();

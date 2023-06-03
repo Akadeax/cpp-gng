@@ -1,11 +1,16 @@
 #include "pch.h"
 #include "PlayerCamera.h"
 
+#include <iostream>
+
+#include "Collider.h"
 #include "constants.h"
+#include "LevelScene.h"
 #include "Transform.h"
 
-PlayerCamera::PlayerCamera(Transform* followTarget)
+PlayerCamera::PlayerCamera(LevelScene* pLevelScene, Transform* followTarget)
 	: Camera(3.1f)
+	, m_pLevelScene{ pLevelScene }
 	, m_pFollowTarget{ followTarget }
 {
 }
@@ -23,6 +28,14 @@ void PlayerCamera::Update(float deltaTime)
 
 	if (newCamPos.x < m_LeftBoundary) newCamPos.x = m_LeftBoundary;
 	else if (newCamPos.x > m_RightBoundary) newCamPos.x = m_RightBoundary;
+
+	if (newCamPos.x >= m_EndStartPos && !m_IsAtEnd)
+	{
+		m_IsAtEnd = true;
+		std::cout << "DID" << std::endl;
+		m_LeftBoundary = m_EndLeftBoundary;
+		m_pLevelScene->AddForegroundCollider(Vector2f(m_EndStartPos - 5, 0), Vector2f(5, 300));
+	}
 
 	SetPosition(newCamPos);
 }

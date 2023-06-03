@@ -36,7 +36,7 @@ void LevelScene::InitializeScene()
 	m_pProjectilePool = new ProjectilePool(this);
 	m_pSpawnerKeeper = new SpawnerKeeper(this);
 
-	m_pCamera = new PlayerCamera(m_pPlayer->GetComponent<Transform>());
+	m_pCamera = new PlayerCamera(this, m_pPlayer->GetComponent<Transform>());
 	// Center camera at start
 	m_pCamera->MovePosition(Vector2f(-450, -300));
 
@@ -56,6 +56,9 @@ void LevelScene::InitializeScene()
 
 
 	CreateSetSpawner(Vector2f(800, 119), EnemyType::greenMonster);
+
+
+	CreateSetSpawner(Vector2f(2840, spawnerHeight), EnemyType::greenMonster);
 }
 
 
@@ -100,6 +103,11 @@ SpawnerKeeper* LevelScene::GetSpawnerKeeper() const
 Entity* LevelScene::GetPlayer() const
 {
 	return m_pPlayer;
+}
+
+void LevelScene::AddForegroundCollider(Vector2f bottomLeft, Vector2f size) const
+{
+	m_pForeground->AddComponentInitialized(Collider::FromBottomLeft(m_pForeground, bottomLeft, size));
 }
 
 void LevelScene::CreatePlayer()
@@ -227,39 +235,39 @@ void LevelScene::CreateLevel()
 	pBackground->Initialize();
 
 
-	Entity* pForeground{ GetEntityKeeper()->CreateEntity(-5) };
+	m_pForeground = GetEntityKeeper()->CreateEntity(-5);
 
-	pForeground->AddComponent(new Transform(pForeground, Vector2f(0, 0)));
-	pForeground->AddComponent(new Renderer(pForeground, foreground, false));
+	m_pForeground->AddComponent(new Transform(m_pForeground, Vector2f(0, 0)));
+	m_pForeground->AddComponent(new Renderer(m_pForeground, foreground, false));
 
 	// Map collision
-	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(-5, 0), Vector2f(5, 200)));
+	m_pForeground->AddComponent(Collider::FromBottomLeft(m_pForeground, Vector2f(-5, 0), Vector2f(5, 200)));
 
-	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(0, 0), Vector2f(1662, 40)));
-	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(610, 111), Vector2f(494, 9)));
-	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(1791, 0), Vector2f(159, 40)));
-	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(1983, 0), Vector2f(32, 40)));
-	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(2047, 0), Vector2f(400, 40)));
-	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(2478, 0), Vector2f(527, 40)));
+	m_pForeground->AddComponent(Collider::FromBottomLeft(m_pForeground, Vector2f(0, 0), Vector2f(1662, 40)));
+	m_pForeground->AddComponent(Collider::FromBottomLeft(m_pForeground, Vector2f(610, 111), Vector2f(494, 9)));
+	m_pForeground->AddComponent(Collider::FromBottomLeft(m_pForeground, Vector2f(1791, 0), Vector2f(159, 40)));
+	m_pForeground->AddComponent(Collider::FromBottomLeft(m_pForeground, Vector2f(1983, 0), Vector2f(32, 40)));
+	m_pForeground->AddComponent(Collider::FromBottomLeft(m_pForeground, Vector2f(2047, 0), Vector2f(400, 40)));
+	m_pForeground->AddComponent(Collider::FromBottomLeft(m_pForeground, Vector2f(2478, 0), Vector2f(527, 40)));
 
-	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(3005, 0), Vector2f(5, 200)));
+	m_pForeground->AddComponent(Collider::FromBottomLeft(m_pForeground, Vector2f(3005, 0), Vector2f(5, 200)));
 
 	// Graves
-	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(47, 40), Vector2f(16, 16)));
-	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(239, 40), Vector2f(16, 16)));
-	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(415, 40), Vector2f(16, 16)));
-	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(527, 40), Vector2f(16, 16)));
-	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(751, 40), Vector2f(16, 16)));
-	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(959, 40), Vector2f(16, 16)));
-	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(1103, 40), Vector2f(16, 16)));
-	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(1263, 40), Vector2f(16, 16)));
-	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(1519, 40), Vector2f(16, 16)));
+	m_pForeground->AddComponent(Collider::FromBottomLeft(m_pForeground, Vector2f(47, 40), Vector2f(16, 16)));
+	m_pForeground->AddComponent(Collider::FromBottomLeft(m_pForeground, Vector2f(239, 40), Vector2f(16, 16)));
+	m_pForeground->AddComponent(Collider::FromBottomLeft(m_pForeground, Vector2f(415, 40), Vector2f(16, 16)));
+	m_pForeground->AddComponent(Collider::FromBottomLeft(m_pForeground, Vector2f(527, 40), Vector2f(16, 16)));
+	m_pForeground->AddComponent(Collider::FromBottomLeft(m_pForeground, Vector2f(751, 40), Vector2f(16, 16)));
+	m_pForeground->AddComponent(Collider::FromBottomLeft(m_pForeground, Vector2f(959, 40), Vector2f(16, 16)));
+	m_pForeground->AddComponent(Collider::FromBottomLeft(m_pForeground, Vector2f(1103, 40), Vector2f(16, 16)));
+	m_pForeground->AddComponent(Collider::FromBottomLeft(m_pForeground, Vector2f(1263, 40), Vector2f(16, 16)));
+	m_pForeground->AddComponent(Collider::FromBottomLeft(m_pForeground, Vector2f(1519, 40), Vector2f(16, 16)));
 
-	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(767, 120), Vector2f(16, 16)));
-	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(863, 120), Vector2f(16, 16)));
-	pForeground->AddComponent(Collider::FromBottomLeft(pForeground, Vector2f(959, 120), Vector2f(16, 16)));
+	m_pForeground->AddComponent(Collider::FromBottomLeft(m_pForeground, Vector2f(767, 120), Vector2f(16, 16)));
+	m_pForeground->AddComponent(Collider::FromBottomLeft(m_pForeground, Vector2f(863, 120), Vector2f(16, 16)));
+	m_pForeground->AddComponent(Collider::FromBottomLeft(m_pForeground, Vector2f(959, 120), Vector2f(16, 16)));
 	
-	pForeground->Initialize();
+	m_pForeground->Initialize();
 
 
 	Texture* pMovingPlatformTexture{ GetTextureCache()->LoadTexture("movingPlatform", "movingPlatform.png")};

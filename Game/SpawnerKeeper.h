@@ -44,7 +44,7 @@ private:
 
 	std::vector<EnemySpawner*> m_SetEnemySpawners;
 
-	const float m_SetSpawnerRange{ 200.f };
+	const float m_SetSpawnerRange{ 180.f };
 
 
 	friend class EnemySpawner;

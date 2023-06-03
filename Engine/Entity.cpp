@@ -8,6 +8,12 @@ void Entity::AddComponent(Component* comp)
 	m_Components.push_back(comp);
 }
 
+void Entity::AddComponentInitialized(Component* comp)
+{
+	AddComponent(comp);
+	comp->Initialize();
+}
+
 std::vector<Component*> Entity::GetComponents() const
 {
 	return m_Components;
