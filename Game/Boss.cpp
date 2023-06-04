@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Boss.h"
 
+#include <cassert>
+
 #include "Animation.h"
 #include "AnimationEndAnimatorTransition.h"
 #include "AnimationFrame.h"
@@ -27,10 +29,51 @@ Boss::Boss(Entity* pParent, EnemyPool<Boss>* returnTo)
 void Boss::ResetEnemy()
 {
 	m_Health = m_MaxHealth;
+
+	m_IsDead = false;
+	m_pAnimator->SetParameter("isDead", false);
+	m_CurrentDeathTime = m_DeathTime;
 }
 
 void Boss::Damage()
 {
+	m_Health--;
+	if (m_Health <= 0)
+	{
+		m_IsDead = true;
+		m_pAnimator->SetParameter("isDead", true);
+		m_pCollider->SetEnabled(false);
+	}
+}
+
+void Boss::Initialize()
+{
+	m_pAnimator = m_pParent->GetComponent<AnimatorRenderer>();
+	assert(m_pAnimator != nullptr && "Entity has Boss component but no AnimatorRenderer component");
+	m_pCollider = m_pParent->GetComponent<Collider>();
+	assert(m_pCollider != nullptr && "Entity has Boss component but no Collider component");
+	m_pPhysicsBody = m_pParent->GetComponent<PhysicsBody>();
+	assert(m_pPhysicsBody != nullptr && "Entity has Boss component but no PhysicsBody component");
+}
+
+void Boss::Update(float deltaTime)
+{
+	if (m_IsDead)
+	{
+		if (m_CurrentDeathTime > 0.f)
+		{
+			m_CurrentDeathTime -= deltaTime;
+		}
+		else
+		{
+			m_pParent->SetActive(false);
+			m_ReturnTo->ReturnObject(this);
+		}
+
+		return;
+	}
+
+	m_pPhysicsBody->SetXVelocity(static_cast<float>(m_WalkingDirMultiplier) * m_WalkSpeed);
 }
 
 Boss* Boss::Create(LevelScene* pScene, EnemyPool<Boss>* returnTo)
@@ -47,9 +90,6 @@ Boss* Boss::Create(LevelScene* pScene, EnemyPool<Boss>* returnTo)
 	const std::unordered_map<std::string, AnimatorState*> enemyStates
 	{
 
-	{ "idle", new AnimatorState(new Animation(std::vector<AnimationFrame*>{
-			new AnimationFrame(1.f, Rectf(spriteWidth * 0, spriteHeight * 1, spriteWidth, spriteHeight)),
-		}))},
 	{ "jump", new AnimatorState(new Animation(std::vector<AnimationFrame*>{
 			new AnimationFrame(1.f, Rectf(spriteWidth * 3, spriteHeight * 1, spriteWidth, spriteHeight)),
 		}))},
@@ -81,7 +121,7 @@ Boss* Boss::Create(LevelScene* pScene, EnemyPool<Boss>* returnTo)
 		pTexture,
 		enemyStates,
 		enemyTransitions,
-		"idle"
+		"walk"
 	));
 
 	// LOGIC

@@ -27,6 +27,9 @@
     <Filter Include="Source\System">
       <UniqueIdentifier>{4ace9ddb-5c93-406b-b750-77190652dbf7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Enemy\Enemies\Boss">
+      <UniqueIdentifier>{56e907ae-b2dc-4bdc-85ef-952aeff02b14}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GhostsAndGoblins.cpp">
@@ -78,7 +81,10 @@
       <Filter>Source\Environment</Filter>
     </ClCompile>
     <ClCompile Include="Boss.cpp">
-      <Filter>Source\Enemy\Enemies</Filter>
+      <Filter>Source\Enemy\Enemies\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="BossWalkingState.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -134,7 +140,10 @@
       <Filter>Source\Environment</Filter>
     </ClInclude>
     <ClInclude Include="Boss.h">
-      <Filter>Source\Enemy\Enemies</Filter>
+      <Filter>Source\Enemy\Enemies\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="BossWalkingState.h">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
