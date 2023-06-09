@@ -7,15 +7,6 @@ class Collider;
 class AnimatorRenderer;
 class LevelScene;
 
-
-enum class BossState
-{
-	walkingLeft,
-	walkingRight,
-	jump,
-	shoot,
-};
-
 class Boss final : public Enemy
 {
 public:
@@ -38,9 +29,6 @@ private:
 	PhysicsBody* m_pPhysicsBody{ nullptr };
 
 	EnemyPool<Boss>* m_ReturnTo;
-
-	int m_WalkingDirMultiplier{ 0 };
-	const float m_WalkSpeed{ 50.f };
 
 	bool m_IsDead{ false };
 	const float m_DeathTime{ 0.3f };

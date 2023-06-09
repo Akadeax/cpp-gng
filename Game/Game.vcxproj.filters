@@ -84,7 +84,13 @@
       <Filter>Source\Enemy\Enemies\Boss</Filter>
     </ClCompile>
     <ClCompile Include="BossWalkingState.cpp">
-      <Filter>Source</Filter>
+      <Filter>Source\Enemy\Enemies\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="BossJumpingState.cpp">
+      <Filter>Source\Enemy\Enemies\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="BossShootingState.cpp">
+      <Filter>Source\Enemy\Enemies\Boss</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -143,7 +149,13 @@
       <Filter>Source\Enemy\Enemies\Boss</Filter>
     </ClInclude>
     <ClInclude Include="BossWalkingState.h">
-      <Filter>Source</Filter>
+      <Filter>Source\Enemy\Enemies\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="BossJumpingState.h">
+      <Filter>Source\Enemy\Enemies\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="BossShootingState.h">
+      <Filter>Source\Enemy\Enemies\Boss</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

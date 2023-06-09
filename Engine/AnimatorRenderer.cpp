@@ -50,6 +50,8 @@ void AnimatorRenderer::Initialize()
 	{
 		state.second->Initialize();
 	}
+
+	m_CurrentState->OnStateEnter(this);
 }
 
 int AnimatorRenderer::GetParameter(const std::string& paramName)

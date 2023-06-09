@@ -32,7 +32,6 @@ void PlayerCamera::Update(float deltaTime)
 	if (newCamPos.x >= m_EndStartPos && !m_IsAtEnd)
 	{
 		m_IsAtEnd = true;
-		std::cout << "DID" << std::endl;
 		m_LeftBoundary = m_EndLeftBoundary;
 		m_pLevelScene->AddForegroundCollider(Vector2f(m_EndStartPos - 5, 0), Vector2f(5, 300));
 	}

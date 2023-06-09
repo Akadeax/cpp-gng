@@ -163,6 +163,8 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Boss.cpp" />
+    <ClCompile Include="BossJumpingState.cpp" />
+    <ClCompile Include="BossShootingState.cpp" />
     <ClCompile Include="BossWalkingState.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemySpawner.cpp" />
@@ -191,6 +193,8 @@ xcopy "$(SolutionDir)Resources\*.*" "$(TargetDir)" /y /d /s
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Boss.h" />
+    <ClInclude Include="BossJumpingState.h" />
+    <ClInclude Include="BossShootingState.h" />
     <ClInclude Include="BossWalkingState.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="Enemy.h" />

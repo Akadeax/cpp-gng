@@ -9,6 +9,9 @@
 #include "AnimatorRenderer.h"
 #include "AnimatorState.h"
 #include "AnimatorTransition.h"
+#include "BossJumpingState.h"
+#include "BossShootingState.h"
+#include "BossWalkingState.h"
 #include "Collider.h"
 #include "ConditionalAnimatorTransition.h"
 #include "Entity.h"
@@ -69,11 +72,7 @@ void Boss::Update(float deltaTime)
 			m_pParent->SetActive(false);
 			m_ReturnTo->ReturnObject(this);
 		}
-
-		return;
 	}
-
-	m_pPhysicsBody->SetXVelocity(static_cast<float>(m_WalkingDirMultiplier) * m_WalkSpeed);
 }
 
 Boss* Boss::Create(LevelScene* pScene, EnemyPool<Boss>* returnTo)
@@ -89,11 +88,13 @@ Boss* Boss::Create(LevelScene* pScene, EnemyPool<Boss>* returnTo)
 
 	const std::unordered_map<std::string, AnimatorState*> enemyStates
 	{
-
-	{ "jump", new AnimatorState(new Animation(std::vector<AnimationFrame*>{
+	{ "jump", new BossJumpingState(new Animation(std::vector<AnimationFrame*>{
 			new AnimationFrame(1.f, Rectf(spriteWidth * 3, spriteHeight * 1, spriteWidth, spriteHeight)),
 		}))},
-	{ "walk", new AnimatorState(new Animation(std::vector<AnimationFrame*>{
+	{ "shoot", new BossShootingState(new Animation(std::vector<AnimationFrame*>{
+			new AnimationFrame(0.3f, Rectf(spriteWidth * 4, spriteHeight * 1, spriteWidth, spriteHeight)),
+		}))},
+	{ "walk", new BossWalkingState(new Animation(std::vector<AnimationFrame*>{
 			new AnimationFrame(0.2f, Rectf(spriteWidth * 1, spriteHeight * 1, spriteWidth, spriteHeight)),
 			new AnimationFrame(0.2f, Rectf(spriteWidth * 2, spriteHeight * 1, spriteWidth, spriteHeight)),
 		}))},
@@ -106,10 +107,7 @@ Boss* Boss::Create(LevelScene* pScene, EnemyPool<Boss>* returnTo)
 
 	const std::list<AnimatorTransition*> enemyTransitions
 	{
-		new ConditionalAnimatorTransition("idle", "walk", "isWalking", true),
-		new ConditionalAnimatorTransition("walk", "idle", "isWalking", false),
-		new ConditionalAnimatorTransition("idle", "jump", "isGrounded", false),
-		new ConditionalAnimatorTransition("jump", "idle", "isGrounded", true),
+		new AnimationEndAnimatorTransition("shoot", "walk"),
 
 		new ConditionalAnimatorTransition("walk", "death", "isDead", true),
 		new ConditionalAnimatorTransition("idle", "death", "isDead", true),
