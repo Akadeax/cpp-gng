@@ -1,5 +1,6 @@
 #pragma once
 
+class SoundHandler;
 class TextureCache;
 class InputHandler;
 class EntityKeeper;
@@ -27,6 +28,7 @@ public:
 	PhysicsHandler* GetPhysicsHandler() const;
 	InputHandler* GetInputHandler() const;
 	TextureCache* GetTextureCache() const;
+	SoundHandler* GetSoundHandler() const;
 protected:
 	Entity* m_pParent;
 };

@@ -35,3 +35,8 @@ TextureCache* Component::GetTextureCache() const
 {
 	return m_pParent->GetScene()->GetTextureCache();
 }
+
+SoundHandler* Component::GetSoundHandler() const
+{
+	return m_pParent->GetScene()->GetGame()->GetSoundHandler();
+}

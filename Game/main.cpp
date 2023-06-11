@@ -22,6 +22,7 @@ int SDL_main(int argv, char** args)
 		constants::SCREEN_HEIGHT,
 		false
 	} } };
+	pGame->InitializeGameEngine();
 	pGame->Run();
 	delete pGame;
 	DumpMemoryLeaks();

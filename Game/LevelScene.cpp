@@ -24,6 +24,8 @@
 #include "PlayerCamera.h"
 #include "PlayerCollider.h"
 #include "ProjectilePool.h"
+#include "SoundEffect.h"
+#include "SoundHandler.h"
 #include "SpawnerKeeper.h"
 #include "Texture.h"
 #include "TextureCache.h"
@@ -59,6 +61,11 @@ void LevelScene::InitializeScene()
 
 
 	CreateSetSpawner(Vector2f(2840, spawnerHeight), EnemyType::boss);
+
+
+	m_pGame->GetSoundHandler()->StopAll();
+	// -1 loops forever (~65k times)
+	m_pGame->GetSoundHandler()->PlaySoundEffect("stage01", -1);
 }
 
 

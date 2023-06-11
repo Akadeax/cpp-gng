@@ -13,6 +13,7 @@
 #include "PhysicsHandler.h"
 #include "PlayerCollider.h"
 #include "ProjectilePool.h"
+#include "SoundHandler.h"
 #include "TextureCache.h"
 #include "Transform.h"
 #include "utils.h"
@@ -116,6 +117,7 @@ void PlayerController::Damage(const Vector2f& from)
 		m_HasArmor = false;
 		m_HurtTimer = m_DamagedInactiveTime;
 		m_pAnimator->SetTexture(GetTextureCache()->GetTexture("playerNaked"));
+		GetSoundHandler()->PlaySoundEffect("arthurHit");
 	}
 	else
 	{
@@ -123,6 +125,8 @@ void PlayerController::Damage(const Vector2f& from)
 		m_HurtTimer = FLT_MAX;
 		m_IsDead = true;
 		m_pAnimator->SetState("deadAir");
+		GetSoundHandler()->StopAll();
+		GetSoundHandler()->PlaySoundEffect("arthurDeath");
 	}
 
 	const Vector2f hitDirection{ from - m_pTransform->GetPosition() };
@@ -242,6 +246,8 @@ void PlayerController::UpdateJumping() const
 		m_pPhysicsBody->SetYVelocity(m_JumpForce);
 		// Move out of ground so next frame isn't considered grounded instantly
 		m_pTransform->MovePosition(Vector2f(0, 1));
+
+		GetSoundHandler()->PlaySoundEffect("arthurJump");
 	}
 }
 
@@ -294,9 +300,12 @@ void PlayerController::UpdateShooting(float deltaTime)
 			20.f,
 			5.f
 		});
+
+		GetSoundHandler()->PlaySoundEffect("arthurThrow");
 	}
 
 	m_pAnimator->SetParameter("isShooting", m_IsShooting);
+
 }
 
 void PlayerController::UpdateHurt(float deltaTime)

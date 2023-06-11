@@ -3,6 +3,7 @@
 #include "structs.h"
 #include "SDL.h"
 
+class SoundHandler;
 class InputHandler;
 class Scene;
 
@@ -16,8 +17,10 @@ public:
 	Game& operator=(Game&& other) = delete;
 	virtual ~Game();
 
+	void InitializeGameEngine();
 	void Run();
 
+	virtual void InitializeGame() = 0;
 	virtual void UpdateGame(float deltaTime) = 0;
 	virtual void DrawGame() const = 0;
 
@@ -27,8 +30,10 @@ public:
 	}
 
 	InputHandler* GetInputHandler() const;
+	SoundHandler* GetSoundHandler() const;
 
 	void MarkSceneLoad(Scene* pScene);
+
 
 protected:
 	// The window properties
@@ -45,9 +50,9 @@ protected:
 
 	Scene* m_pCurrentScene;
 	InputHandler* m_pInputHandler;
+	SoundHandler* m_pSoundHandler;
 
 	// FUNCTIONS
-	void InitializeGameEngine();
 	void CleanupGameEngine();
 
 	void Update(float deltaTime);

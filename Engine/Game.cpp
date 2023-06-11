@@ -7,6 +7,7 @@
 
 #include "InputHandler.h"
 #include "Scene.h"
+#include "SoundHandler.h"
 
 Game::Game(const Window& window, Scene* pStartScene)
 	: m_Window{ window }
@@ -17,8 +18,8 @@ Game::Game(const Window& window, Scene* pStartScene)
 	, m_MaxElapsedSeconds{ 0.1f }
 	, m_pCurrentScene{ pStartScene }
 	, m_pInputHandler{ new InputHandler() }
+	, m_pSoundHandler{ new SoundHandler() }
 {
-	InitializeGameEngine();
 }
 
 Game::~Game()
@@ -120,14 +121,13 @@ void Game::InitializeGameEngine()
 	}
 
 	//Initialize SDL_mixer
-	/*
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	{
 		std::cerr << "Game::Initialize( ), error when calling Mix_OpenAudio: " << Mix_GetError() << std::endl;
 		return;
 	}
-	*/
 
+	InitializeGame();
 	m_pCurrentScene->Initialize(this);
 
 	m_Initialized = true;
@@ -194,6 +194,11 @@ void Game::Run()
 InputHandler* Game::GetInputHandler() const
 {
 	return m_pInputHandler;
+}
+
+SoundHandler* Game::GetSoundHandler() const
+{
+	return m_pSoundHandler;
 }
 
 void Game::MarkSceneLoad(Scene* pScene)
