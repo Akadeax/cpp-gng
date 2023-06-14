@@ -40,6 +40,7 @@ SpawnerKeeper::~SpawnerKeeper()
 {
 	delete m_pZombiePool;
 	delete m_pGreenMonsterPool;
+	delete m_pBossPool;
 }
 
 void SpawnerKeeper::Update(float deltaTime)
