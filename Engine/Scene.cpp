@@ -50,11 +50,14 @@ void Scene::Update(float deltaTime)
 
 void Scene::Draw() const
 {
-	// Draw UI above here
 	glPushMatrix();
 	m_pCamera->Draw();
 	m_pEntityKeeper->DrawEntities();
 	DrawScene();
+	glPopMatrix();
+
+	glPushMatrix();
+	DrawHud();
 	glPopMatrix();
 }
 

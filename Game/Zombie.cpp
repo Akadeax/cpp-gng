@@ -15,6 +15,7 @@
 #include "Collider.h"
 #include "ConditionalAnimatorTransition.h"
 #include "EntityKeeper.h"
+#include "HudHandler.h"
 #include "TextureCache.h"
 #include "utils.h"
 
@@ -114,6 +115,8 @@ void Zombie::Damage()
 
 	m_CurrentDeathTime = m_DeathTime;
 	m_IsDead = true;
+
+	m_pLevelScene->GetHudHandler()->AddScore(m_ScoreValue);
 }
 
 void Zombie::ResetEnemy()

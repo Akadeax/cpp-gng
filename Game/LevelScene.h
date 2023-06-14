@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "Vector2f.h"
 
+class HudHandler;
 class Collider;
 enum class EnemyType;
 class SpawnerKeeper;
@@ -18,9 +19,11 @@ public:
 	void InitializeScene() override;
 	void UpdateScene(float deltaTime) override;
 	void DrawScene() const override;
+	void DrawHud() const override;
 
 	ProjectilePool* GetProjectilePool() const;
 	SpawnerKeeper* GetSpawnerKeeper() const;
+	HudHandler* GetHudHandler() const;
 
 	Entity* GetPlayer() const;
 
@@ -29,6 +32,7 @@ public:
 private:
 	ProjectilePool* m_pProjectilePool{};
 	SpawnerKeeper* m_pSpawnerKeeper{};
+	HudHandler* m_pHudHandler{};
 
 	Entity* m_pPlayer{};
 
@@ -42,5 +46,5 @@ private:
 	void CreateLadder(float xCoord) const;
 	void CreateZombieSpawner(const Vector2f& pos) const;
 	void CreateSetSpawner(const Vector2f& pos, EnemyType type) const;
-};
 
+};

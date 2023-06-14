@@ -92,6 +92,9 @@
     <ClCompile Include="BossShootingState.cpp">
       <Filter>Source\Enemy\Enemies\Boss</Filter>
     </ClCompile>
+    <ClCompile Include="HudHandler.cpp">
+      <Filter>Source\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GhostsAndGoblins.h">
@@ -156,6 +159,9 @@
     </ClInclude>
     <ClInclude Include="BossShootingState.h">
       <Filter>Source\Enemy\Enemies\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="HudHandler.h">
+      <Filter>Source\System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

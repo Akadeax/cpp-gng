@@ -25,6 +25,7 @@ public:
 	virtual void InitializeScene() = 0;
 	virtual void UpdateScene(float deltaTime) = 0;
 	virtual void DrawScene() const = 0;
+	virtual void DrawHud() const = 0;
 
 	Game* GetGame() const;
 

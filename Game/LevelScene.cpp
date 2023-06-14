@@ -17,6 +17,7 @@
 #include "PhysicsBody.h"
 #include "PlayerController.h"
 #include "Game.h"
+#include "HudHandler.h"
 #include "InputHandler.h"
 #include "LadderCollider.h"
 #include "MovingPlatform.h"
@@ -24,7 +25,6 @@
 #include "PlayerCamera.h"
 #include "PlayerCollider.h"
 #include "ProjectilePool.h"
-#include "SoundEffect.h"
 #include "SoundHandler.h"
 #include "SpawnerKeeper.h"
 #include "Texture.h"
@@ -37,6 +37,7 @@ void LevelScene::InitializeScene()
 
 	m_pProjectilePool = new ProjectilePool(this);
 	m_pSpawnerKeeper = new SpawnerKeeper(this);
+	m_pHudHandler = new HudHandler(this);
 
 	m_pCamera = new PlayerCamera(this, m_pPlayer->GetComponent<Transform>());
 	// Center camera at start
@@ -73,6 +74,7 @@ LevelScene::~LevelScene()
 {
 	delete m_pSpawnerKeeper;
 	delete m_pProjectilePool;
+	delete m_pHudHandler;
 }
 
 void LevelScene::UpdateScene(float deltaTime)
@@ -97,6 +99,11 @@ void LevelScene::DrawScene() const
 #endif
 }
 
+void LevelScene::DrawHud() const
+{
+	m_pHudHandler->Draw();
+}
+
 ProjectilePool* LevelScene::GetProjectilePool() const
 {
 	return m_pProjectilePool;
@@ -105,6 +112,11 @@ ProjectilePool* LevelScene::GetProjectilePool() const
 SpawnerKeeper* LevelScene::GetSpawnerKeeper() const
 {
 	return m_pSpawnerKeeper;
+}
+
+HudHandler* LevelScene::GetHudHandler() const
+{
+	return m_pHudHandler;
 }
 
 Entity* LevelScene::GetPlayer() const
@@ -123,8 +135,7 @@ void LevelScene::CreatePlayer()
 	m_pTextureCache->LoadTexture("playerNaked", "playerNaked_22x25.png");
 
 	m_pPlayer = m_pEntityKeeper->CreateEntity(100, "Player");
-	//m_pPlayer->AddComponent(new Transform(m_pPlayer, Vector2f(100, 40)));
-	m_pPlayer->AddComponent(new Transform(m_pPlayer, Vector2f(2600, 40)));
+	m_pPlayer->AddComponent(new Transform(m_pPlayer, Vector2f(100, 40)));
 
 	// RENDERING
 	const float spriteWidth{ 22.f };

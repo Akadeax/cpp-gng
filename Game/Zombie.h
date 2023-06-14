@@ -53,4 +53,6 @@ private:
 
 	float m_Lifetime{};
 	const float m_TimeUntilDespawn{ 7.f };
+
+	const int m_ScoreValue{ 100 };
 };
