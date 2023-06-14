@@ -16,8 +16,10 @@
 #include "ConditionalAnimatorTransition.h"
 #include "Entity.h"
 #include "EntityKeeper.h"
+#include "Game.h"
 #include "LevelScene.h"
 #include "PhysicsBody.h"
+#include "SoundHandler.h"
 #include "TextureCache.h"
 #include "Transform.h"
 
@@ -46,6 +48,11 @@ void Boss::Damage()
 		m_IsDead = true;
 		m_pAnimator->SetParameter("isDead", true);
 		m_pCollider->SetEnabled(false);
+		GetSoundHandler()->PlaySoundEffect("bossDeath");
+	}
+	else
+	{
+		GetSoundHandler()->PlaySoundEffect("bossHit");
 	}
 }
 
@@ -71,6 +78,8 @@ void Boss::Update(float deltaTime)
 		{
 			m_pParent->SetActive(false);
 			m_ReturnTo->ReturnObject(this);
+
+			GetParent()->GetScene()->GetGame()->MarkSceneLoad(new LevelScene());
 		}
 	}
 }

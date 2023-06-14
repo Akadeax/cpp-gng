@@ -14,6 +14,7 @@ class Zombie final : public Enemy
 {
 public:
 	explicit Zombie(Entity* pParent, LevelScene* pLevelScene, EnemyPool<Zombie>* returnTo);
+
 	void Initialize() override;
 	void Update(float deltaTime) override;
 

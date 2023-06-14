@@ -4,14 +4,26 @@
 #include <sstream>
 
 #include "constants.h"
+#include "Game.h"
+#include "InputHandler.h"
 #include "LevelScene.h"
 #include "Texture.h"
 #include "TextureCache.h"
 
 HudHandler::HudHandler(LevelScene* pLevelScene)
 	: m_pLevelScene{ pLevelScene }
+	, m_pGame{ pLevelScene->GetGame() }
 {
 	m_pNumbersTexture = m_pLevelScene->GetTextureCache()->LoadTexture("numbers", "numbers.png");
+	AddScore(0);
+}
+
+void HudHandler::Update()
+{
+	if (m_pLevelScene->GetGame()->GetInputHandler()->GetKeyDown("pause"))
+	{
+		m_pGame->SetPaused(!m_pGame->IsPaused());
+	}
 }
 
 void HudHandler::Draw() const

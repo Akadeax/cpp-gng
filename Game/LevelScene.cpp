@@ -65,8 +65,7 @@ void LevelScene::InitializeScene()
 
 
 	m_pGame->GetSoundHandler()->StopAll();
-	// -1 loops forever (~65k times)
-	m_pGame->GetSoundHandler()->PlaySoundEffect("stage01", -1);
+	m_pGame->GetSoundHandler()->PlayMusic("stage01", true);
 }
 
 
@@ -80,6 +79,7 @@ LevelScene::~LevelScene()
 void LevelScene::UpdateScene(float deltaTime)
 {
 	m_pSpawnerKeeper->Update(deltaTime);
+	m_pHudHandler->Update();
 
 	// Parallax the background
 	const float newXPos{ (m_pCamera->GetPosition().x * 0.2f) };
@@ -87,7 +87,7 @@ void LevelScene::UpdateScene(float deltaTime)
 
 	if (m_pGame->GetInputHandler()->GetKeyDown("information"))
 	{
-		std::cout << "Controls:\nArrows keys: move\nJ: jump\nK: shoot\n";
+		std::cout << "Controls:\nArrows keys: move\nJ: jump\nK: shoot\nEscape: Pause\n";
 	}
 }
 

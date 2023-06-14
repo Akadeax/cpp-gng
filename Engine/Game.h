@@ -34,6 +34,8 @@ public:
 
 	void MarkSceneLoad(Scene* pScene);
 
+	void SetPaused(bool newVal);
+	bool IsPaused() const;
 
 protected:
 	// The window properties
@@ -59,4 +61,6 @@ protected:
 	void Draw() const;
 
 	Scene* m_pSceneLoadBuffer{ nullptr };
+
+	bool m_Paused{ false };
 };

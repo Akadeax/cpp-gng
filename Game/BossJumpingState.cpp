@@ -6,6 +6,7 @@
 #include "AnimatorRenderer.h"
 #include "Entity.h"
 #include "PhysicsBody.h"
+#include "SoundHandler.h"
 #include "Transform.h"
 
 BossJumpingState::BossJumpingState(Animation* anim)
@@ -30,6 +31,8 @@ void BossJumpingState::OnStateEnter(AnimatorRenderer* animator)
 	m_pTransform->MovePosition(Vector2f(0, 1));
 
 	m_pPhysicsBody->SetYVelocity(m_JumpStrength);
+
+	animator->GetSoundHandler()->PlaySoundEffect("bossJump");
 }
 
 void BossJumpingState::OnStateUpdate(AnimatorRenderer* animator, float deltaTime)

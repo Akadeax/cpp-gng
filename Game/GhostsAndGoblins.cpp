@@ -20,8 +20,9 @@ void GhostsAndGoblins::InitializeGame()
 	m_pInputHandler->AddKey("down", SDL_SCANCODE_DOWN);
 	m_pInputHandler->AddKey("jump", SDL_SCANCODE_J);
 	m_pInputHandler->AddKey("fire", SDL_SCANCODE_K);
+	m_pInputHandler->AddKey("pause", SDL_SCANCODE_ESCAPE);
 
-	m_pSoundHandler->AddSoundEffect("stage01", "SFX/stage01.wav");
+	m_pSoundHandler->AddMusic("stage01", "SFX/stage01.wav");
 
 	m_pSoundHandler->AddSoundEffect("arthurDeath", "SFX/arthur_death.wav");
 	m_pSoundHandler->AddSoundEffect("arthurHit", "SFX/arthur_hit.wav");
@@ -30,6 +31,8 @@ void GhostsAndGoblins::InitializeGame()
 
 	m_pSoundHandler->AddSoundEffect("bossHit", "SFX/boss_hit.wav");
 	m_pSoundHandler->AddSoundEffect("bossDeath", "SFX/boss_death.wav");
+	m_pSoundHandler->AddSoundEffect("bossAttack", "SFX/boss_attack.wav");
+	m_pSoundHandler->AddSoundEffect("bossJump", "SFX/boss_jump.wav");
 
 	m_pSoundHandler->AddSoundEffect("enemyHit", "SFX/enemy_hit.wav");
 	m_pSoundHandler->AddSoundEffect("enemyDeath", "SFX/enemy_death.wav");

@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "SoundEffect.h"
+#include "SoundStream.h"
 
 SoundHandler::~SoundHandler()
 {
@@ -26,10 +27,27 @@ void SoundHandler::PlaySoundEffect(const std::string& name, int loops)
 	}
 }
 
-void SoundHandler::StopAll()
+void SoundHandler::AddMusic(const std::string& name, const std::string& file)
 {
-	for (auto& pair : m_SoundEffects)
+	m_Music[name] = new SoundStream(file);
+}
+
+void SoundHandler::PlayMusic(const std::string& name, bool repeat)
+{
+	if (!m_Music[name]->Play(repeat))
+	{
+		std::cout << "Failed to play Music " << name << std::endl;
+	}
+}
+
+void SoundHandler::StopAll() const
+{
+	for (const auto& pair : m_SoundEffects)
 	{
 		pair.second->StopAll();
+	}
+	for (const auto& pair : m_Music)
+	{
+		pair.second->Stop();
 	}
 }

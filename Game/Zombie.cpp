@@ -16,6 +16,7 @@
 #include "ConditionalAnimatorTransition.h"
 #include "EntityKeeper.h"
 #include "HudHandler.h"
+#include "SoundHandler.h"
 #include "TextureCache.h"
 #include "utils.h"
 
@@ -39,7 +40,6 @@ void Zombie::Initialize()
 	assert(m_pPhysicsBody != nullptr && "Entity has Zombie component but no PhysicsBody component");
 	m_pAnimator = m_pParent->GetComponent<AnimatorRenderer>();
 	assert(m_pAnimator != nullptr && "Entity has Zombie component but no AnimatorRenderer component");
-
 }
 
 void Zombie::Update(float deltaTime)
@@ -72,6 +72,7 @@ void Zombie::Update(float deltaTime)
 		else
 		{
 			m_pCollider->SetEnabled(true);
+			GetSoundHandler()->PlaySoundEffect("zombieSpawn");
 			m_Spawned = true;
 		}
 	}
@@ -117,6 +118,7 @@ void Zombie::Damage()
 	m_IsDead = true;
 
 	m_pLevelScene->GetHudHandler()->AddScore(m_ScoreValue);
+	GetSoundHandler()->PlaySoundEffect("enemyDeath");
 }
 
 void Zombie::ResetEnemy()

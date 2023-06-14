@@ -207,6 +207,16 @@ void Game::MarkSceneLoad(Scene* pScene)
 	m_pSceneLoadBuffer = pScene;
 }
 
+void Game::SetPaused(bool newVal)
+{
+	m_Paused = newVal;
+}
+
+bool Game::IsPaused() const
+{
+	return m_Paused;
+}
+
 void Game::CleanupGameEngine()
 {
 	SDL_GL_DeleteContext(m_pContext);
@@ -234,9 +244,9 @@ void Game::CleanupGameEngine()
 void Game::Update(float deltaTime)
 {
 	m_pInputHandler->Update();
-	m_pCurrentScene->Update(deltaTime);
+	m_pCurrentScene->Update(m_Paused ? 0.f : deltaTime);
 
-	UpdateGame(deltaTime);
+	UpdateGame(m_Paused ? 0.f : deltaTime);
 
 	if (m_pCurrentScene->IsMarkedForDeletion())
 	{

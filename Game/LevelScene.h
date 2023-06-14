@@ -14,6 +14,11 @@ class Entity;
 class LevelScene final : public Scene
 {
 public:
+	explicit LevelScene() = default;
+	LevelScene& operator=(const LevelScene& rhs) = delete;
+	LevelScene& operator=(LevelScene&& rhs) = delete;
+	LevelScene(const LevelScene& rhs) = delete;
+	LevelScene(LevelScene&& rhs) = delete;
 	~LevelScene() override;
 
 	void InitializeScene() override;

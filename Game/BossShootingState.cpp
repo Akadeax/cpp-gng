@@ -6,6 +6,7 @@
 #include "Entity.h"
 #include "PhysicsBody.h"
 #include "ProjectilePool.h"
+#include "SoundHandler.h"
 #include "Transform.h"
 
 BossShootingState::BossShootingState(Animation* anim)
@@ -31,7 +32,7 @@ void BossShootingState::OnStateEnter(AnimatorRenderer* animator)
 	};
 
 	pScene->GetProjectilePool()->FireProjectile(data);
-
+	animator->GetSoundHandler()->PlaySoundEffect("bossAttack");
 }
 
 void BossShootingState::OnStateUpdate(AnimatorRenderer* animator, float deltaTime)
