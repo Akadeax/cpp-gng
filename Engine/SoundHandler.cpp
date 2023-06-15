@@ -12,6 +12,10 @@ SoundHandler::~SoundHandler()
 	{
 		delete effect.second;
 	}
+	for (const std::pair<std::string, SoundStream*> music : m_Music)
+	{
+		delete music.second;
+	}
 }
 
 void SoundHandler::AddSoundEffect(const std::string& name, const std::string& file)

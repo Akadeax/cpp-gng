@@ -99,10 +99,6 @@ void collisions::ProjectVertices(const std::vector<Vector2f>& vertices, const Ve
 		Vector2f v{ vertices[i] };
 		const float proj{ v.DotProduct(axis) };
 
-		//utils::SetColor(Color4f(1, 0, 1, 1));
-		//utils::DrawLine(vertices[i].ToPoint2f(), (axis * proj).ToPoint2f(), 2);
-		//utils::DrawLine(vertices[i].ToPoint2f(), (axis * proj).ToPoint2f(), 2);
-
 		if (proj < min) min = proj;
 		if (proj > max) max = proj;
 	}
@@ -112,7 +108,7 @@ bool collisions::IntersectLinePolygon(const Vector2f& p1, const Vector2f& p2, co
 {
 	if (IntersectPointPolygon(p1, vertices)) return true;
 
-	// http://jeffreythompson.org/collision-detection/poly-line.php
+	// based on http://jeffreythompson.org/collision-detection/poly-line.php
 	const size_t vertexAmount{ vertices.size() };
 	for (size_t i{ 0 }; i < vertexAmount; i++)
 	{
@@ -128,7 +124,7 @@ bool collisions::IntersectLinePolygon(const Vector2f& p1, const Vector2f& p2, co
 
 bool collisions::IntersectLines(const Vector2f& p1, const Vector2f& p2, const Vector2f& p3, const Vector2f& p4)
 {
-	// http://jeffreythompson.org/collision-detection/line-line.php
+	// based on http://jeffreythompson.org/collision-detection/line-line.php
 	const float uA{ ((p4.x - p3.x) * (p1.y - p3.y) - (p4.y - p3.y) * (p1.x - p3.x)) / ((p4.y - p3.y) * (p2.x - p1.x) - (p4.x - p3.x) * (p2.y - p1.y)) };
 	const float uB{ ((p2.x - p1.x) * (p1.y - p3.y) - (p2.y - p1.y) * (p1.x - p3.x)) / ((p4.y - p3.y) * (p2.x - p1.x) - (p4.x - p3.x) * (p2.y - p1.y)) };
 
@@ -141,7 +137,7 @@ bool collisions::IntersectLines(const Vector2f& p1, const Vector2f& p2, const Ve
 
 bool collisions::IntersectPointPolygon(const Vector2f& p1, const std::vector<Vector2f>& vertices)
 {
-	// http://jeffreythompson.org/collision-detection/poly-point.php
+	// based on http://jeffreythompson.org/collision-detection/poly-point.php
 	bool collision{ false };
 
 	const size_t vertexAmount{ vertices.size() };
